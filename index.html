@@ -3,16 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Display Jadwal Sholat - Masjid Baiturrahman</title>
+<title>Display Jadwal Sholat - Masjid baiturrahman</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:url("masjid2.jpg") no-repeat center center fixed;
-  background-size:cover;
-  color:white;
-}
+
 
 /* HEADER */
 #headerTop{
@@ -22,11 +16,11 @@ body{
   background:rgba(0,0,0,.45);
   padding:15px 30px;
   border-radius:18px;
-  margin:20px;
+  margin-bottom:25px;
 }
 
 #jamDigital{
-  font-size:4.5rem;
+  font-size:4.2rem;
   font-weight:900;
   color:#00ffff;
   text-shadow:0 0 15px rgba(0,255,255,.9);
@@ -39,6 +33,7 @@ body{
   font-weight:900;
 }
 
+/* ALAMAT BERJALAN */
 #alamatWrapper{
   overflow:hidden;
   white-space:nowrap;
@@ -47,11 +42,11 @@ body{
 #alamatMasjid{
   display:inline-block;
   padding-left:100%;
-  animation:jalanAlamat 18s linear infinite;
+  animation:alamatJalan 18s linear infinite;
   font-size:1.3rem;
   color:#ffeeaa;
 }
-@keyframes jalanAlamat{
+@keyframes alamatJalan{
   from{transform:translateX(0)}
   to{transform:translateX(-100%)}
 }
@@ -60,82 +55,59 @@ body{
 #tanggalDisplay{font-size:1.5rem}
 #hijriDisplay{font-size:1.4rem;color:#ffd966}
 
+
+
+
 /* HARI BESAR */
 #hariBesarBox{
   background:rgba(0,0,0,.55);
   padding:12px 14px;
   border-radius:12px;
-  position:fixed;
+  position: fixed;
   right:10px;
-  top:180px;
+  top:160px;
   max-width:300px;
   font-size:1rem;
   font-weight:600;
+  text-align:right;
   color:#ffd966;
 }
 
-/* JADWAL */
-.footer{
-  position:absolute;
-  bottom:0;
+
+
+/* TABLE */
+table{
   width:100%;
-  padding:10px;
+  max-width:700px;
+  margin:auto;
+  border-collapse:collapse;
+  font-size:1.4rem;
 }
-
-.jadwal{
-  display:flex;
-  gap:15px;
-  padding:0 10px;
-}
-
-.box{
-  flex:1;
-  text-align:center;
-  padding:10px;
-  border-radius:10px;
-}
-.box span{font-size:18px}
-.box strong{font-size:28px}
-
-.imsak{background:#607d8b}
-.subuh{background:#2196f3}
-.dzuhur{background:#4caf50}
-.ashar{background:#ff9800}
-.maghrib{background:#f44336}
-.isya{background:#673ab7}
-
-/* COUNTDOWN */
-#countdown{
-  position:absolute;
-  bottom:120px;
-  left:10px;
-  background:rgba(0,0,0,.55);
-  padding:12px 16px;
-  border-radius:12px;
-  font-size:1.3rem;
+th,td{
+  padding:12px;
+  background:rgba(0,0,0,.4);
 }
 
 /* MARQUEE */
-.marquee{
-  background:rgba(0,0,0,.7);
-  overflow:hidden;
-  padding:10px;
+#marqueeBox{
+  background:rgba(0,0,0,.55);
+  padding:12px;
+  font-size:1.6rem;
+  margin-top:25px;
   border-radius:8px;
-  margin-top:10px;
+  overflow:hidden;
 }
-.marquee span{
+#marqueeText{
   display:inline-block;
   white-space:nowrap;
-  padding-left:100%;
-  animation:marquee 35s linear infinite;
-  font-size:20px;
+  animation:jalan 18s linear infinite;
 }
-@keyframes marquee{
-  from{transform:translateX(0)}
+@keyframes jalan{
+  from{transform:translateX(100%)}
   to{transform:translateX(-100%)}
 }
 
-/* ADZAN */
+/* OVERLAY ADZAN */
 #adzanOverlay{
   position:fixed;
   inset:0;
@@ -145,19 +117,25 @@ body{
   justify-content:center;
   z-index:9999;
 }
+
 #adzanOverlay img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
+
+
 </style>
+
+<link rel="stylesheet" href="style1.css">
+
 </head>
 
 <body>
 
 <!-- HEADER -->
 <div id="headerTop">
-  <div id="jamDigital">--:--</div>
+  <div><div id="jamDigital"></div></div>
 
   <div class="header-center">
     <div id="masjidName">MASJID<br>BAITURRAHMAN</div>
@@ -166,148 +144,154 @@ body{
     </div>
   </div>
 
- <div class="header-right">
+  <div class="header-right">
     <marquee><div id="tanggalDisplay"></div></marquee>
     <div id="hijriDisplay"></div>
   </div>
 </div>
-
+<!-- HARI BESAR ISLAM -->
 <div id="hariBesarBox">
-  <span id="hariBesarText">Memuat...</span>
+  <span id="hariBesarText">Memuat hari besar Islam...</span>
+ </div>
 </div>
 
-<!-- FOOTER -->
-<div class="footer">
-
-  <div class="jadwal">
-    <div class="box imsak"><span>IMSAK</span><strong id="imsak">--:--</strong></div>
-    <div class="box subuh"><span>SUBUH</span><strong id="subuh">--:--</strong></div>
-    <div class="box dzuhur"><span>DZUHUR</span><strong id="dzuhur">--:--</strong></div>
-    <div class="box ashar"><span>ASHAR</span><strong id="ashar">--:--</strong></div>
-    <div class="box maghrib"><span>MAGHRIB</span><strong id="maghrib">--:--</strong></div>
-    <div class="box isya"><span>ISYA</span><strong id="isya">--:--</strong></div>
+<!-- ================= JADWAL SHOLAT (BAWAH) ================= -->
+<div class="footer-text">
+ <div class="jadwal" id="jadwalTable">
+  <div class="box imsak">
+    <span>IMSAK</span>
+    <strong id="imsak">--:--</strong>
   </div>
 
-  <div id="countdown">Memuat...</div>
+  <div class="box subuh">
+    <span>SUBUH</span>
+    <strong id="subuh">--:--</strong>
+  </div>
 
+  <div class="box dzuhur">
+    <span>DZUHUR</span>
+    <strong id="dzuhur">--:--</strong>
+  </div>
+
+  <div class="box ashar">
+    <span>ASHAR</span>
+    <strong id="ashar">--:--</strong>
+  </div>
+
+  <div class="box maghrib">
+    <span>MAGHRIB</span>
+    <strong id="maghrib">--:--</strong>
+  </div>
+
+  <div class="box isya">
+    <span>ISYA</span>
+    <strong id="isya">--:--</strong>
+   </div>
+  </div>
+
+<!-- ================= COUNTDOWN ================= -->
+<div class="countdown" id="countdown">Memuat...</div>
+<!-- Running Text -->
   <div class="marquee">
-    <span>
-      Sholat berjamaah lebih utama dua puluh tujuh derajat. 
-      Mohon matikan atau silent handphone saat sholat berlangsung.
-    </span>
+    <span>Sholat berjamaah lebih utama dua puluh tujuh derajat.” (HR. Bukhari & Muslim)
+      -Mohon matikan atau silent handphone saat sholat berlangsung.-Luruskan dan rapatkan shaf demi kesempurnaan sholat kita.
+      -Sesungguhnya sholat itu mencegah dari perbuatan keji dan mungkar.-Jagalah kebersihan dan ketenangan masjid.-</span>
   </div>
+ </div>
+  
+<!-- ================= AUDIO ADZAN ================= -->
+<audio id="adzanAudio" src="beep.mp3"></audio>
+
+<!-- OVERLAY ADZAN IMAGE -->
+<div id="adzanOverlay">
+  <img src="adzan.jpg" alt="Adzan">
 </div>
 
-<audio id="adzanAudio" src="beep.mp3"></audio>
-<div id="adzanOverlay"><img src="adzan.jpg"></div>
+<!-- ================= DATA SHOLAT ================= -->
+<script src="data.js"></script>
 
 <script>
-/* ================= JAM & TANGGAL ================= */
-const jamDigital     = document.getElementById("jamDigital");
-const tanggalDisplay = document.getElementById("tanggalDisplay");
-const hijriDisplay   = document.getElementById("hijriDisplay");
+/* UPDATE JADWAL DARI data.js */
+const ids = ["imsak","subuh","dzuhur","ashar","maghrib","isya"];
 
-function updateWaktu(){
-  const n = new Date();
+const updateJadwalHTML = () => {
+  if (!jadwal) return;
+  ids.forEach(id => {
+    document.getElementById(id).textContent = jadwal[id];
+  });
+};
 
-  jamDigital.textContent =
-    String(n.getHours()).padStart(2,'0') + ":" +
-    String(n.getMinutes()).padStart(2,'0');
+setInterval(updateJadwalHTML, 1000);
 
-  tanggalDisplay.textContent =
-    n.toLocaleDateString("id-ID",{
-      weekday:"long",
-      day:"numeric",
-      month:"long",
-      year:"numeric"
-    });   
+/* JAM REALTIME */
+function updateJam() {
+  const now = new Date();
+  document.getElementById("jam").textContent =
+    now.toLocaleTimeString("id-ID", { hour12:false });
 }
-updateWaktu();
-setInterval(updateWaktu,1000);
-/* ================= HIJRI CUSTOM ================= */
+setInterval(updateJam, 1000);
+updateJam();
+
+/* TANGGAL */
+const now = new Date();
+
+document.getElementById("tanggal-masehi").textContent =
+  now.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+document.getElementById("tanggal-hijriah").textContent =
+  new Intl.DateTimeFormat(
+    "id-ID-u-ca-islamic-umalqura",
+    { day:"numeric", month:"long", year:"numeric" }
+  ).format(now);
+</script>
+
+
+<script>
+/* JAM */
+setInterval(()=>{
+  const n=new Date()
+  jamDigital.textContent=
+  `${String(n.getHours()).padStart(2,0)}:${String(n.getMinutes()).padStart(2,0)}`
+},1000)
+
+/* TANGGAL & HIJRI */
+setInterval(()=>{
+  const h=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"]
+  const b=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus",
+               "September","Oktober","November","Desember"]
+  const n=new Date()
+  tanggalDisplay.textContent=`${h[n.getDay()]}, ${n.getDate()} ${b[n.getMonth()]} ${n.getFullYear()}`
 const hijriMonths = [
   "Muharram","Safar","Rabiul Awal","Rabiul Akhir",
   "Jumadil Awal","Jumadil Akhir",
-  "Rajab","Sya'ban","Ramadhan",
+  "Rajab","Syaban","Ramadhan",
   "Syawal","Dzulqaidah","Dzulhijjah"
 ];
 
-function updateHijri(){
-  const now = new Date();
+const d = new Date();
 
-  const parts = new Intl.DateTimeFormat(
-    "en-TN-u-ca-islamic-umalqura",
-    { day:"numeric", month:"numeric", year:"numeric" }
-  ).formatToParts(now);
+const fmt = new Intl.DateTimeFormat(
+  'id-US-u-ca-islamic-umalqura',
+  { day:'numeric', month:'numeric', year:'numeric', weekday:'long' }
+);
 
-  let d,m,y;
-  parts.forEach(p=>{
-    if(p.type==="day") d=p.value;
-    if(p.type==="month") m=p.value;
-    if(p.type==="year") y=p.value;
-  });
+const parts = fmt.formatToParts(d);
+const day = parts.find(p=>p.type==='day').value;
+const month = parts.find(p=>p.type==='month').value;
+const year = parts.find(p=>p.type==='year').value;
+const weekday = parts.find(p=>p.type==='weekday').value;
 
-  hijriDisplay.textContent = `${d} ${hijriMonths[m-1]} ${y} H`;
-}
-updateHijri();
-setInterval(updateHijri,3600000);
+document.getElementById("hijriDisplay").innerHTML =
+  `${day} ${hijriMonths[month-1]} ${year} H`;
+},1000)  
 
 
 
-/* ================= DATA SHOLAT ================= */
-let jadwal=null;
-let sudahAdzan={
-  Subuh:false,Zuhur:false,Asar:false,Maghrib:false,Isya:false
-};
-const lokasiId=1301;
-
-fetch(`https://api.myquran.com/v2/sholat/jadwal/${lokasiId}/${new Date().toISOString().slice(0,10).replace(/-/g,'/')}`)
-.then(r=>r.json())
-.then(j=>{
-  jadwal=j.data.jadwal;
-  ["imsak","subuh","dzuhur","ashar","maghrib","isya"].forEach(id=>{
-    document.getElementById(id).textContent=jadwal[id];
-  });
-});
-
-/* ================= COUNTDOWN ================= */
-setInterval(()=>{
-  if(!jadwal) return;
-
-  const now=new Date();
-  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-
-  const list=[
-    {n:"Subuh",t:jadwal.subuh},
-    {n:"Zuhur",t:jadwal.dzuhur},
-    {n:"Asar",t:jadwal.ashar},
-    {n:"Maghrib",t:jadwal.maghrib},
-    {n:"Isya",t:jadwal.isya}
-  ];
-
-  let next=null;
-  list.forEach(j=>{
-    const [h,m]=j.t.split(":");
-    const d=new Date(today.getFullYear(),today.getMonth(),today.getDate(),h,m);
-    if(d>now&&!next) next={...j,d};
-  });
-
-  if(!next){
-    countdown.textContent="Semua sholat hari ini telah selesai";
-    return;
-  }
-
-  const diff=next.d-now;
-  const h=Math.floor(diff/3600000);
-  const m=Math.floor((diff%3600000)/60000);
-  const s=Math.floor((diff%60000)/1000);
-
-  countdown.innerHTML=
-    `<span style="color:white">${next.n.toUpperCase()}</span> :
-     <span style="color:red">${h}j ${m}m ${s}d</span>`;
-},1000);
-</script>
-<script>
 /* HARI BESAR ISLAM */
 const hariBesar=[
   {n:"Isra Mi'raj Nabi (ﷺ)",m:1,d:16},
@@ -330,8 +314,9 @@ function updateHariBesar(){
   })
   hariBesarText.textContent=`${dekat.n} — ${sel} hari lagi`
 }
-updateHariBesar();
-setInterval(updateHariBesar, 3600000); // update tiap 1 jam
+updateHariBesar()
+
+
 /* BACKGROUND SLIDE */
 const bg=["mbr.jpg","masjid2.jpg"]
 let i=0
@@ -340,5 +325,57 @@ setInterval(()=>{
   i=(i+1)%bg.length
 },15000)
 </script>
+<script>
+/* ================= ADZAN IMAGE + AUDIO ================= */
+
+const waktuSholat = ["subuh","dzuhur","ashar","maghrib","isya"];
+let statusAdzan = {
+  subuh:false,
+  dzuhur:false,
+  ashar:false,
+  maghrib:false,
+  isya:false
+};
+
+function cekAdzan(){
+  if(!jadwal) return;
+
+  const now = new Date();
+  const jamSekarang =
+    String(now.getHours()).padStart(2,'0') + ":" +
+    String(now.getMinutes()).padStart(2,'0');
+
+  waktuSholat.forEach(w=>{
+    if(jadwal[w] === jamSekarang && !statusAdzan[w]){
+      statusAdzan[w] = true;
+      tampilkanAdzan();
+    }
+  });
+}
+
+function tampilkanAdzan(){
+  const overlay = document.getElementById("adzanOverlay");
+  const audio = document.getElementById("adzanAudio");
+
+  overlay.style.display = "flex";
+  audio.currentTime = 0;
+  audio.play();
+
+  setTimeout(()=>{
+    overlay.style.display = "none";
+  },15000); // 15 detik
+}
+
+setInterval(cekAdzan,1000);
+</script>
+
+<div id="bg"></div>
+
+  <div id="overlay">
+    <div id="countdown"></div>
+  </div>
 </body>
 </html>
+
+
+
