@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Display Jadwal Sholat - Masjid Baiturrahman</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:url("masjid2.jpg") no-repeat center center fixed;
+  background-size:cover;
+  color:white;
+}
+
+/* HEADER */
+#headerTop{
+  display:grid;
+  grid-template-columns:1fr 2fr 1fr;
+  align-items:center;
+  background:rgba(0,0,0,.45);
+  padding:15px 30px;
+  border-radius:18px;
+  margin:20px;
+}
+
+#jamDigital{
+  font-size:4.5rem;
+  font-weight:900;
+  color:#00ffff;
+  text-shadow:0 0 15px rgba(0,255,255,.9);
+}
+
+.header-center{text-align:center}
+
+#masjidName{
+  font-size:2.6rem;
+  font-weight:900;
+}
+
+#alamatWrapper{
+  overflow:hidden;
+  white-space:nowrap;
+  margin-top:6px;
+}
+#alamatMasjid{
+  display:inline-block;
+  padding-left:100%;
+  animation:jalanAlamat 18s linear infinite;
+  font-size:1.3rem;
+  color:#ffeeaa;
+}
+@keyframes jalanAlamat{
+  from{transform:translateX(0)}
+  to{transform:translateX(-100%)}
+}
+
+.header-right{text-align:right}
+#tanggalDisplay{font-size:1.5rem}
+#hijriDisplay{font-size:1.4rem;color:#ffd966}
+
+/* HARI BESAR */
+#hariBesarBox{
+  background:rgba(0,0,0,.55);
+  padding:12px 14px;
+  border-radius:12px;
+  position:fixed;
+  right:10px;
+  top:180px;
+  max-width:300px;
+  font-size:1rem;
+  font-weight:600;
+  color:#ffd966;
+}
+
+/* JADWAL */
+.footer{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  padding:10px;
+}
+
+.jadwal{
+  display:flex;
+  gap:15px;
+  padding:0 10px;
+}
+
+.box{
+  flex:1;
+  text-align:center;
+  padding:10px;
+  border-radius:10px;
+}
+.box span{font-size:18px}
+.box strong{font-size:28px}
+
+.imsak{background:#607d8b}
+.subuh{background:#2196f3}
+.dzuhur{background:#4caf50}
+.ashar{background:#ff9800}
+.maghrib{background:#f44336}
+.isya{background:#673ab7}
+
+/* COUNTDOWN */
+#countdown{
+  position:absolute;
+  bottom:120px;
+  left:10px;
+  background:rgba(0,0,0,.55);
+  padding:12px 16px;
+  border-radius:12px;
+  font-size:1.3rem;
+}
+
+/* MARQUEE */
+.marquee{
+  background:rgba(0,0,0,.7);
+  overflow:hidden;
+  padding:10px;
+  border-radius:8px;
+  margin-top:10px;
+}
+.marquee span{
+  display:inline-block;
+  white-space:nowrap;
+  padding-left:100%;
+  animation:marquee 35s linear infinite;
+  font-size:20px;
+}
+@keyframes marquee{
+  from{transform:translateX(0)}
+  to{transform:translateX(-100%)}
+}
+
+/* ADZAN */
+#adzanOverlay{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+#adzanOverlay img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="headerTop">
+  <div id="jamDigital">--:--</div>
+
+  <div class="header-center">
+    <div id="masjidName">MASJID<br>BAITURRAHMAN</div>
+    <div id="alamatWrapper">
+      <div id="alamatMasjid">PERUMAHAN ARYA GRAHA, JL. ARYA PUTRA</div>
+    </div>
+  </div>
+
+ <div class="header-right">
+    <marquee><div id="tanggalDisplay"></div></marquee>
+    <div id="hijriDisplay"></div>
+  </div>
+</div>
+
+<div id="hariBesarBox">
+  <span id="hariBesarText">Memuat...</span>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+
+  <div class="jadwal">
+    <div class="box imsak"><span>IMSAK</span><strong id="imsak">--:--</strong></div>
+    <div class="box subuh"><span>SUBUH</span><strong id="subuh">--:--</strong></div>
+    <div class="box dzuhur"><span>DZUHUR</span><strong id="dzuhur">--:--</strong></div>
+    <div class="box ashar"><span>ASHAR</span><strong id="ashar">--:--</strong></div>
+    <div class="box maghrib"><span>MAGHRIB</span><strong id="maghrib">--:--</strong></div>
+    <div class="box isya"><span>ISYA</span><strong id="isya">--:--</strong></div>
+  </div>
+
+  <div id="countdown">Memuat...</div>
+
+  <div class="marquee">
+    <span>
+      Sholat berjamaah lebih utama dua puluh tujuh derajat. 
+      Mohon matikan atau silent handphone saat sholat berlangsung.
+    </span>
+  </div>
+</div>
+
+<audio id="adzanAudio" src="beep.mp3"></audio>
+<div id="adzanOverlay"><img src="adzan.jpg"></div>
+
+<script>
+/* ================= JAM & TANGGAL ================= */
+const jamDigital     = document.getElementById("jamDigital");
+const tanggalDisplay = document.getElementById("tanggalDisplay");
+const hijriDisplay   = document.getElementById("hijriDisplay");
+
+function updateWaktu(){
+  const n = new Date();
+
+  jamDigital.textContent =
+    String(n.getHours()).padStart(2,'0') + ":" +
+    String(n.getMinutes()).padStart(2,'0');
+
+  tanggalDisplay.textContent =
+    n.toLocaleDateString("id-ID",{
+      weekday:"long",
+      day:"numeric",
+      month:"long",
+      year:"numeric"
+    });   
+}
+updateWaktu();
+setInterval(updateWaktu,1000);
+/* ================= HIJRI CUSTOM ================= */
+const hijriMonths = [
+  "Muharram","Safar","Rabiul Awal","Rabiul Akhir",
+  "Jumadil Awal","Jumadil Akhir",
+  "Rajab","Sya'ban","Ramadhan",
+  "Syawal","Dzulqaidah","Dzulhijjah"
+];
+
+function updateHijri(){
+  const now = new Date();
+
+  const parts = new Intl.DateTimeFormat(
+    "en-TN-u-ca-islamic-umalqura",
+    { day:"numeric", month:"numeric", year:"numeric" }
+  ).formatToParts(now);
+
+  let d,m,y;
+  parts.forEach(p=>{
+    if(p.type==="day") d=p.value;
+    if(p.type==="month") m=p.value;
+    if(p.type==="year") y=p.value;
+  });
+
+  hijriDisplay.textContent = `${d} ${hijriMonths[m-1]} ${y} H`;
+}
+updateHijri();
+setInterval(updateHijri,3600000);
+
+
+
+/* ================= DATA SHOLAT ================= */
+let jadwal=null;
+let sudahAdzan={
+  Subuh:false,Zuhur:false,Asar:false,Maghrib:false,Isya:false
+};
+const lokasiId=1301;
+
+fetch(`https://api.myquran.com/v2/sholat/jadwal/${lokasiId}/${new Date().toISOString().slice(0,10).replace(/-/g,'/')}`)
+.then(r=>r.json())
+.then(j=>{
+  jadwal=j.data.jadwal;
+  ["imsak","subuh","dzuhur","ashar","maghrib","isya"].forEach(id=>{
+    document.getElementById(id).textContent=jadwal[id];
+  });
+});
+
+/* ================= COUNTDOWN ================= */
+setInterval(()=>{
+  if(!jadwal) return;
+
+  const now=new Date();
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+
+  const list=[
+    {n:"Subuh",t:jadwal.subuh},
+    {n:"Zuhur",t:jadwal.dzuhur},
+    {n:"Asar",t:jadwal.ashar},
+    {n:"Maghrib",t:jadwal.maghrib},
+    {n:"Isya",t:jadwal.isya}
+  ];
+
+  let next=null;
+  list.forEach(j=>{
+    const [h,m]=j.t.split(":");
+    const d=new Date(today.getFullYear(),today.getMonth(),today.getDate(),h,m);
+    if(d>now&&!next) next={...j,d};
+  });
+
+  if(!next){
+    countdown.textContent="Semua sholat hari ini telah selesai";
+    return;
+  }
+
+  const diff=next.d-now;
+  const h=Math.floor(diff/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+
+  countdown.innerHTML=
+    `<span style="color:white">${next.n.toUpperCase()}</span> :
+     <span style="color:red">${h}j ${m}m ${s}d</span>`;
+},1000);
+</script>
+<script>
+/* HARI BESAR ISLAM */
+const hariBesar=[
+  {n:"Isra Mi'raj Nabi (ﷺ)",m:1,d:16},
+  {n:"Awal Ramadhan",m:2,d:18},
+  {n:"Nuzulul Qur'an",m:3,d:07},
+  {n:"Idul Fitri",m:3,d:20},
+  {n:"Idul Adha",m:5,d:27},
+  {n:"Tahun Baru Islam",m:6,d:16},
+  {n:"Maulid Nabi (ﷺ)",m:8,d:25}
+]
+
+function updateHariBesar(){
+  const now=new Date()
+  let dekat=null,sel=9999
+  hariBesar.forEach(h=>{
+    let t=new Date(now.getFullYear(),h.m-1,h.d)
+    if(t<now)t.setFullYear(t.getFullYear()+1)
+    let s=Math.ceil((t-now)/86400000)
+    if(s<sel){sel=s;dekat=h}
+  })
+  hariBesarText.textContent=`${dekat.n} — ${sel} hari lagi`
+}
+updateHariBesar();
+setInterval(updateHariBesar, 3600000); // update tiap 1 jam
+/* BACKGROUND SLIDE */
+const bg=["mbr.jpg","masjid2.jpg"]
+let i=0
+setInterval(()=>{
+  document.body.style.backgroundImage=`url('${bg[i]}')`
+  i=(i+1)%bg.length
+},15000)
+</script>
+</body>
+</html>
