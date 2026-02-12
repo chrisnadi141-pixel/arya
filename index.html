@@ -285,53 +285,37 @@ setInterval(()=>{
 },1000);
 </script>
 <script>
-/* ================= HARI BESAR ISLAM ================= */
-const hariBesarText = document.getElementById("hariBesarText");
-
-/* estimasi (kalender hijriah sederhana – stabil untuk display masjid) */
-const hariBesar = [
-  { n:"Isra Mi'raj Nabi ﷺ",  m:7,  d:27 },
-  { n:"Awal Ramadhan",      m:9,  d:2  },
-  { n:"Nuzulul Qur'an",     m:9,  d:17 },
-  { n:"Idul Fitri",         m:10, d:1  },
-  { n:"Idul Adha",          m:12, d:10 },
-  { n:"Tahun Baru Islam",   m:1,  d:1  },
-  { n:"Maulid Nabi ﷺ",      m:3,  d:12 }
-];
+/* HARI BESAR ISLAM */
+const hariBesar=[
+  {n:"Isra Mi'raj Nabi (ﷺ)",m:1,d:16},
+  {n:"Awal Ramadhan",m:2,d:18},
+  {n:"Nuzulul Qur'an",m:3,d:07},
+  {n:"Idul Fitri",m:3,d:20},
+  {n:"Idul Adha",m:5,d:27},
+  {n:"Tahun Baru Islam",m:6,d:16},
+  {n:"Maulid Nabi (ﷺ)",m:8,d:25}
+]
 
 function updateHariBesar(){
-  const now = new Date();
-
-  const hijriNow = new Intl.DateTimeFormat(
-    "en-TN-u-ca-islamic",
-    { day:"numeric", month:"numeric", year:"numeric" }
-  ).formatToParts(now);
-
-  const hDay   = parseInt(hijriNow.find(p=>p.type==="day").value);
-  const hMonth = parseInt(hijriNow.find(p=>p.type==="month").value);
-  const hYear  = parseInt(hijriNow.find(p=>p.type==="year").value);
-
-  let terdekat = null;
-  let selisihTerkecil = 9999;
-
+  const now=new Date()
+  let dekat=null,sel=9999
   hariBesar.forEach(h=>{
-    let selisih =
-      (h.m - hMonth) * 30 + (h.d - hDay);
-
-    if(selisih < 0) selisih += 354; // tahun hijriah rata-rata
-
-    if(selisih < selisihTerkecil){
-      selisihTerkecil = selisih;
-      terdekat = h;
-    }
-  });
-
-  hariBesarText.textContent =
-    `${terdekat.n} — ${selisihTerkecil} hari lagi`;
+    let t=new Date(now.getFullYear(),h.m-1,h.d)
+    if(t<now)t.setFullYear(t.getFullYear()+1)
+    let s=Math.ceil((t-now)/86400000)
+    if(s<sel){sel=s;dekat=h}
+  })
+  hariBesarText.textContent=`${dekat.n} — ${sel} hari lagi`
 }
-
 updateHariBesar();
 setInterval(updateHariBesar, 3600000); // update tiap 1 jam
+/* BACKGROUND SLIDE */
+const bg=["mbr.jpg","masjid2.jpg"]
+let i=0
+setInterval(()=>{
+  document.body.style.backgroundImage=`url('${bg[i]}')`
+  i=(i+1)%bg.length
+},15000)
 </script>
 </body>
 </html>
