@@ -79,7 +79,7 @@ setInterval(() => {
 
   countdown.innerHTML = `
     <span style="color:white;font-weight:bold;">
-      MENUJU ${next.nama.toUpperCase()}
+      ${next.nama.toUpperCase()}
     </span>
     : <span style="color:red;">
       ${h}j ${m}m ${s}d
@@ -95,6 +95,7 @@ setInterval(() => {
   }
 
 }, 1000)
+
 
 
 
