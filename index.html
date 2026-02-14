@@ -111,12 +111,20 @@ th,td{
 /* OVERLAY ADZAN */
 #adzanOverlay{
   position:fixed;
-  inset:0;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
   background:black;
-  display:none;
-  align-items:center;
-  justify-content:center;
+  display:none;            
   z-index:9999;
+}
+
+#adzanOverlay img{
+  width:100vw;
+  height:100vh;
+  object-fit:cover;
+  display:block;
 }
 
 #adzanOverlay img{
@@ -355,7 +363,7 @@ function cekAdzan(){
 }
 
 function tampilkanAdzan(){
-  const overlay = document.getElementById("adzanOverlay");
+  const overlay = document.getElementById("adzanOverlay").style.display = "block";
   const audio = document.getElementById("adzanAudio");
 
   overlay.style.display = "flex";
@@ -373,6 +381,7 @@ setInterval(cekAdzan,1000);
 
 </body>
 </html>
+
 
 
 
