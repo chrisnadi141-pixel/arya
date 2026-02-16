@@ -5,7 +5,7 @@
 let jadwal = null
 let sudahAdzan = {
   Subuh:false,
-  Zuhur:false,
+  Dzuhur:false,
   Asar:false,
   Maghrib:false,
   Isya:false
@@ -36,7 +36,7 @@ setInterval(() => {
 
   const urutanSholat = [
     { nama: "Subuh",    key: "subuh" },
-    { nama: "Zuhur",    key: "dzuhur" },
+    { nama: "Dzuhur",    key: "dzuhur" },
     { nama: "Asar",     key: "ashar" },
     { nama: "Maghrib",  key: "maghrib" },
     { nama: "Isya",     key: "isya" }
@@ -78,10 +78,10 @@ setInterval(() => {
   const s = Math.floor((diff % 60000) / 1000);
 
   countdown.innerHTML = `
-    <span style="color:white;font-weight:bold;">
+    <span style="color:red;font-weight:bold;">
       ${next.nama.toUpperCase()}
     </span>
-    : <span style="color:red;">
+    : <span style="color:white;">
       -${h}: ${m}: ${s}
     </span>
   `;
@@ -95,6 +95,7 @@ setInterval(() => {
   }
 
 }, 1000)
+
 
 
 
