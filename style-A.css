@@ -12,7 +12,7 @@ body{
   background-size: cover;
   color: white;
   overflow: hidden;
-  padding-top: 150px; /* ruang header fixed */
+  padding-top: 100px; /* ruang header fixed */
 }
 .countdown{
   position:absolute;           
@@ -95,6 +95,7 @@ body{
   text-align: center;
   padding: 10px;
 }
+
 
 
 
