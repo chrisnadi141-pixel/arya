@@ -33,7 +33,7 @@ body::before{
 /* ================= JADWAL SHOLAT ================= */
 .countdown{
   position:absolute;           
-  bottom:120px;                
+  bottom:60px;                
   left:10px;                  
   background:rgba(0,0,0,.55);
   padding:10px 14px;
@@ -46,10 +46,13 @@ body::before{
 }
 
 .jadwal {
-  margin-top: auto;          
+  position: absolute;
+  bottom: 60px;     
+  right: 0;       /* pindah ke kanan */
   display: flex;
-  flex-direction: row;       
-  gap: 15px;
+  flex-direction: column;  /* box jadi vertikal */
+  gap: 5px;
+  width: 150px;   /* atur lebar sesuai kebutuhan */
 }
 
 .box {
@@ -114,5 +117,4 @@ body::before{
   text-align: center;
   padding: 10px;
 }
-
 
