@@ -13,8 +13,7 @@ body{
   background-size:cover;
   color:white;
   font-family:Arial, sans-serif;
-  text-shadow:1px 2px 4px rgba(0,0,0,.7);										  
-
+  text-shadow:1px 2px 4px rgba(0,0,0,.7);										 
 }	
 /* HEADER */
 #headerTop{
@@ -72,7 +71,6 @@ body{
 }
 
 .header-right{text-align: right;
-  /* Mencegah kolom kanan menyusut atau terdorong */
   min-width: 0; 
 }
 
@@ -93,6 +91,7 @@ body{
   text-align:right;
   color:#ffd966;
 }
+
 /* ================= CSS LAPORAN KEUANGAN ================= */													
 .main-content {
   flex: 1;
@@ -103,8 +102,8 @@ body{
 
 .finance-container {
   position: absolute;
-  top: 250px;   /* sesuaikan */
-  left: 50px;  /* sesuaikan */
+  top: 250px;
+  left: 50px;
   opacity: 0;
   pointer-events: none;
   transition: 0.3s ease;
@@ -117,24 +116,24 @@ body{
 }
 
 .finance-title {
-    font-size: 1.5rem;
-    color: #ffd966;
-    margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #ffd966;
+  margin-bottom: 15px;
   text-align: center;					 
-    text-transform: uppercase;
-    letter-spacing: 2px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
   font-weight: bold;					
 }
 
 .finance-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
 .finance-box {
-    padding: 15px;
-    border-radius: 15px;
+  padding: 15px;
+  border-radius: 15px;
   text-align: center;
 }
 
@@ -146,7 +145,7 @@ body{
 .finance-box .amount { display: block; font-size: 1.8rem; font-weight: 900; }
 .footer-note { font-size: 0.85rem; color: white; font-style: italic; }
 
-/* ================= CSS PENGUMUMAN ================= */
+/* ================= CSS PENGUMUMAN (BOX 3 & BOX 5) ================= */
 .announcement-container,
 .announcement-container-5 {
   position: absolute;
@@ -165,11 +164,111 @@ body{
   pointer-events: auto;
 }
 
+/* Style gambar luar agar Box 3 dan Box 5 memiliki border & shadow yang sama */
 .announcement-img {
   width: 100%;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   border: 4px solid #ffd966; 
+}
+
+/* ================= BANNER JUMAT DI DALAM CONTAINER 5 ================= */
+.banner-jumat {
+  position: relative;
+  width: 100%; /* Mengikuti lebar container (700px) agar seragam */
+  box-sizing: border-box;
+  font-family: 'Arial Narrow', 'Arial Black', sans-serif;  
+  text-align: center;
+  text-transform: uppercase;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border: 4px solid #ffd966; /* Samakan border emasnya dengan pengumuman3 */
+}
+
+/* Gambar diposisikan di paling belakang teks */
+.banner-bg {
+  width: 100%;
+  display: block;
+}
+
+/* Teks diletakkan di atas gambar */
+.banner-content {
+  position: absolute;
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px; 
+}
+
+/* Baris 1: HARI & TANGGAL */
+.banner-title {
+  color: #dfb76c; 
+  font-size: 32px; /* Disesuaikan skalanya untuk box lebar 700px */
+  font-weight: 900;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin: 0;
+  text-shadow: 
+    2px 2px 0px #000, -2px -2px 0px #000, 
+    2px -2px 0px #000, -2px 2px 0px #000,
+    0px 3px 6px rgba(0, 0, 0, 0.9);
+}
+
+.section-group {
+  margin: 5px 0;
+}
+
+/* Gaya untuk Label (KHOTIB & IMAM:, BILAL:) */
+.banner-label {
+  color: #dfb76c; 
+  font-size: 24px; 
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-shadow: 
+    2px 2px 0px #000, -2px -2px 0px #000, 
+    2px -2px 0px #000, -2px 2px 0px #000,
+    0px 2px 5px rgba(0, 0, 0, 0.9);
+}
+
+/* Gaya Dasar untuk Teks Nama */
+.banner-name {
+  font-size: 34px; 
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+/* Warna Nama Khotib (Hijau neon) */
+.name-gold {
+  color: #00FF00;
+  text-shadow: 
+    2px 2px 0px #000, -2px -2px 0px #000, 
+    2px -2px 0px #000, -2px 2px 0px #000,
+    0px 3px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* Warna Nama Bilal (Putih Bersih) */
+.name-white {
+  color: #ffffff;
+  text-shadow: 
+    2px 2px 0px #000, -2px -2px 0px #000, 
+    2px -2px 0px #000, -2px 2px 0px #000,
+    0px 3px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* Baris Paling Bawah: Info Petugas */
+.banner-footer {
+  margin-top: 5px;
+  color: #a0aec0;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px #000;
 }
 
 /* TABLE */
@@ -206,46 +305,46 @@ th,td{
 
 /* ================= OVERLAY FULL SCREEN ================= */
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: none; /* Akan diubah jadi 'flex' lewat JS */
-    justify-content: center;
-    align-items: center;
-    z-index: 999999; /* Pastikan angka ini paling tinggi */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  z-index: 999999; 
 }
 
 .overlay-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url("iqomah.jpg") no-repeat center center;
-    background-size: cover; 
-    filter: brightness(0.4); 
-    z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("iqomah.jpg") no-repeat center center;
+  background-size: cover; 
+  filter: brightness(0.4); 
+  z-index: -1;
 }
 
 .overlay-content {
-    text-align: center;
-    color: white;
+  text-align: center;
+  color: white;
 }
 
 .countdown-large {
-    font-size: 12rem; 
-    font-weight: 900;
-    color: #ffffff;
-    text-shadow: 0 0 30px rgba(0,0,0,1);
+  font-size: 12rem; 
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 0 30px rgba(0,0,0,1);
 }
 
 .overlay-text {
-    font-size: 4rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 5px;
+  font-size: 4rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 5px;
 }
 </style>
 
@@ -256,7 +355,7 @@ th,td{
 
 <div id="headerTop">
   <div id="jamDigital">
-        <span id="hDisplay">00</span><span class="kedip">:</span><span id="mDisplay">00</span>
+    <span id="hDisplay">00</span><span class="kedip">:</span><span id="mDisplay">00</span>
   </div>
 
   <div class="header-center">
@@ -271,8 +370,8 @@ th,td{
   </div>
 
   <div class="header-right">
-      <div id="tanggalDisplay"></div>
-      <div id="hijriDisplay"></div>
+    <div id="tanggalDisplay"></div>
+    <div id="hijriDisplay"></div>
   </div>
 </div>
 
@@ -280,12 +379,30 @@ th,td{
   <span id="hariBesarText">Memuat hari besar Islam...</span>
 </div>
 
-
 <div class="announcement-container">
-    <img src="pengumuman3.jpg" alt="Pengumuman Masjid 3" class="announcement-img">
+  <img src="pengumuman3.jpg" alt="Pengumuman Masjid 3" class="announcement-img">
 </div>
+
 <div class="announcement-container-5">
-    <img src="pengumuman5.jpg" alt="Pengumuman Masjid 5" class="announcement-img">
+  <div class="banner-jumat">
+    <img src="khotib.jpg" alt="Background" class="banner-bg">
+    
+    <div class="banner-content">
+      <div class="banner-title" id="banner-date">MEMUAT TANGGAL...</div>
+      
+      <div class="section-group">
+        <div class="banner-label">KHOTIB & IMAM :</div>
+        <div class="banner-name name-gold" id="load-khotib-imam">Memuat...</div>
+      </div>
+      
+      <div class="section-group">
+        <div class="banner-label">BILAL :</div>
+        <div class="banner-name name-white" id="load-bilal">Memuat...</div>
+      </div>
+      
+      <div class="banner-footer">Info Petugas Shalat Jumat</div>
+    </div>
+  </div>
 </div>
 
 <div id="configModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:100000; justify-content:center; align-items:center;">
@@ -377,18 +494,16 @@ th,td{
 
 
 <script>
-  // Pemicu Tombol Keyboard Terintegrasi (Mencegah Crash / Saling Bentrok)
+  // Pemicu Tombol Keyboard Terintegrasi
   document.addEventListener('keydown', (e) => {
     const financeBox = document.querySelector('.finance-container');
     const announceBox3 = document.querySelector('.announcement-container');
     const announceBox5 = document.querySelector('.announcement-container-5');
 
-    // Tombol 1: Fullscreen Toggle
     if (e.key === '1') {
       toggleFullscreen();
     }
 
-    // Tombol 2: Laporan Keuangan
     if (e.key === '2') {
       if (financeBox) {
         financeBox.classList.toggle('active');
@@ -397,7 +512,6 @@ th,td{
       }
     }
 
-    // Tombol 3: Pengumuman 3
     if (e.key === '3') {
       if (announceBox3) {
         announceBox3.classList.toggle('active');
@@ -406,7 +520,6 @@ th,td{
       }
     }
             
-    // Tombol 5: Pengumuman 5
     if (e.key === '5') {
       if (announceBox5) {
         announceBox5.classList.toggle('active');
@@ -415,7 +528,6 @@ th,td{
       }
     }
 
-    // Tombol 7: Ganti Tema CSS
     if (e.key === '7') {
       const theme = document.getElementById("theme-link");
       if (theme) {
@@ -427,7 +539,6 @@ th,td{
       }
     }
 
-    // Tombol 9: Buka Modal Pengaturan Marquee
     if (e.key === '9') {
       const modal = document.getElementById("configModal");
       if (modal.style.display === "none" || modal.style.display === "") {
@@ -438,7 +549,6 @@ th,td{
       }
     }
 
-    // Tombol 0: Reset LocalStorage
     if (e.key === '0') {
       const konfirmasi = confirm("Apakah Anda yakin ingin mereset tampilan ke pengaturan awal?");
       if (konfirmasi) {
@@ -447,13 +557,11 @@ th,td{
       }
     }
 
-    // Tombol Enter untuk STB / Remote
     if (e.key === 'Enter' || e.keyCode === 13) {
       toggleFullscreen();
     }
   }); 
 
-  // Fungsi Fullscreen
   function toggleFullscreen() {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch((err) => {
@@ -464,16 +572,13 @@ th,td{
     }
   }
 
-  // Klik Layar untuk Fullscreen
   document.addEventListener('click', (e) => {
-    // Abaikan klik jika yang diklik area di dalam modal konfigurasi
     if(document.getElementById("configModal").style.display === "flex" && e.target.closest("#configModal > div")) {
-       return;
+        return;
     }
     toggleFullscreen();
   });
 
-  // Fungsi Modal Config
   function tutupConfig() {
     document.getElementById("configModal").style.display = "none";
   }
@@ -493,6 +598,7 @@ th,td{
 </script>
 
 <script>
+// Logic Jam, Tanggal & Kalender Hijriah
 setInterval(() => {
   const n = new Date();
   document.getElementById("hDisplay").textContent = String(n.getHours()).padStart(2, '0');
@@ -503,13 +609,13 @@ setInterval(() => {
 
   const tanggalDisplay = document.getElementById("tanggalDisplay");
   if(tanggalDisplay) {
-     tanggalDisplay.textContent = `${hari[n.getDay()]}, ${n.getDate()} ${bulan[n.getMonth()]} ${n.getFullYear()}`;
+       tanggalDisplay.textContent = `${hari[n.getDay()]}, ${n.getDate()} ${bulan[n.getMonth()]} ${n.getFullYear()}`;
   }
 
   const hijriMonths = ["Muharram","Safar","Rabiul Awal","Rabiul Akhir","Jumadil Awal","Jumadil Akhir","Rajab","Sya'ban","Ramadhan","Syawal","Dzulqaidah","Dzulhijjah"];
 
   const d = new Date();
-d.setDate(d.getDate() - 0);						   
+  d.setDate(d.getDate() - 0);						   
   const fmt = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', { day:'numeric', month:'numeric', year:'numeric', weekday:'long' });
 
   const parts = fmt.formatToParts(d);
@@ -519,13 +625,14 @@ d.setDate(d.getDate() - 0);
 
   const hijriDisplay = document.getElementById("hijriDisplay");
   if(hijriDisplay) {
-     hijriDisplay.innerHTML = `${day} ${hijriMonths[month-1]} ${year} H`;
+       hijriDisplay.innerHTML = `${day} ${hijriMonths[month-1]} ${year} H`;
   }
 }, 1000);  
 </script>
 
 <script src="sudi_2026.js"></script>
 <script>
+// Ambil & Parsing Jadwal Sholat dari CSV
 function parseCSV(text){
   const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
   lines.shift();
@@ -534,7 +641,7 @@ function parseCSV(text){
     for(let c of line){
       if(c=='"'){cur.q=!cur.q;continue;}
       if(c==',' && !cur.q){cells.push(cur.v);cur.v='';continue;}
-      cur.v+=c;
+      if(cur.v+=c);
     }
     cells.push(cur.v);
     return cells.map(c=>c.trim());
@@ -573,6 +680,7 @@ if (typeof rawData !== 'undefined') {
 </script>
 
 <script>
+// Hitung Mundur Adzan & Iqomah
 let modeIqomahActive = false;
 let sedangProses = false;
 let statusAdzan = {};
@@ -581,7 +689,7 @@ const hariIni = new Date().getDay();
 function updateCountdown(){
   if(!window.jadwal) return;
 
-  const now = new Date(new Date().getTime() + 28000);
+  const now = new Date(new Date().getTime() + 0);
   const today = new Date();
 
   const list = [
@@ -670,6 +778,7 @@ setInterval(updateCountdown, 1000);
 </script>
 
 <script>
+// Informasi Hari Besar Islam
 const hariBesar = [
   {n:"Isra Mi'raj Nabi (ﷺ)",m:1,d:16},
   {n:"Awal Ramadhan",m:2,d:19},
@@ -711,7 +820,7 @@ setInterval(() => {
   const jamSekarang = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
   ["subuh","dzuhur","ashar","maghrib","isya"].forEach(w => {
     if (window.jadwal[w] === jamSekarang && !statusAdzan[w]) {
-      sedangProses = true;
+      sedengProses = true;
       statusAdzan[w] = true;
       const audio = document.getElementById("adzanAudio");
       if(audio) audio.play().catch(e => {});
@@ -725,5 +834,77 @@ setInterval(() => {
 }, 60000);
 </script>
 
+<!--<script>
+  // Script Jadwal Petugas Jumat Otomatis
+  const jadwalKhotib = {
+    "12/06/2026":  ["Bp. DEDEN M.NOOR","Bp. SUGENG"],
+    "19/06/2026":  ["Bp. LUKMANUL HAKIM","Bp. SUGENG"],
+    "26/06/2026":  ["Bp. DIDI HUSNI MUBAROK","Bp. SUGENG"],
+    "03/07/2026":  ["Bp. ABDUL AZIS","Bp. SUGENG"],
+    "10/07/2026":  ["Bp. ADIB HIDAYAT","Bp. SUGENG"],
+    "17/07/2026":  ["Bp. AHMAD FAIZ","Bp. SUGENG"],
+    "24/07/2026":  ["Bp. IBNU IZZUDDIN","Bp. SUGENG"],
+    "31/07/2026":  ["Bp. M.DIMYATI AMIN","Bp. SUGENG"],
+    "07/08/2026":  ["Bp. BETA NOOR","Bp. SUGENG"],
+    "14/08/2026":  ["Bp. H. SAEFUL BAHRI","Bp. SUGENG"],
+    "21/08/2026":  ["Bp. ABDULLAH MUNIF","Bp. SUGENG"],
+    "28/08/2026":  ["Bp. ISMATULLAH","Bp. SUGENG"],
+    "04/09/2026":  ["Bp. UMAR ABDUL JABAR","Bp. SUGENG"],
+    "11/09/2026":  ["Bp. TAUFIQURRAHMAN","Bp. SUGENG"],
+    "18/09/2026":  ["Bp. DARSO","Bp. SUGENG"],
+    "25/09/2026":  ["Bp. ROSIDI HIDAYATULLAH","Bp. SUGENG"],
+    "02/10/2026":  ["Bp. DEDEN M.NOOR","Bp. SUGENG"],
+    "09/10/2026":  ["Bp. LUKMANUL HAKIM","Bp. SUGENG"],
+    "16/10/2026":  ["Bp. DIDI HUSNI MUBAROK","Bp. SUGENG"],
+    "23/10/2026":  ["Bp. ABDUL AZIS","Bp. SUGENG"],
+    "30/10/2026":  ["Bp. ADIB HIDAYAT","Bp. SUGENG"],
+    "06/11/2026":  ["Bp. AHMAD FAIZ","Bp. SUGENG"],
+    "13/11/2026":  ["Bp. IBNU IZZUDDIN","Bp. SUGENG"],
+    "20/11/2026":  ["Bp. M.DIMYATI AMIN","Bp. SUGENG"],
+    "27/11/2026":  ["Bp. BETA NOOR","Bp. SUGENG"],
+    "04/12/2026":  ["Bp. H. SAEFUL BAHRI","Bp. SUGENG"],
+    "11/12/2026":  ["Bp. ABDULLAH MUNIF","Bp. SUGENG"],
+    "18/12/2026":  ["Bp. ISMATULLAH","Bp. SUGENG"],
+    "25/12/2026":  ["Bp. UMAR ABDUL JABAR","Bp. SUGENG"],
+  };
+
+  function updateBannerDate(now) {
+    const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+    
+    const dayName = days[now.getDay()];
+    const dateNum = now.getDate();
+    const monthName = months[now.getMonth()];
+    const yearNum = now.getFullYear();
+    
+    const bannerDateEl = document.getElementById('banner-date');
+    if(bannerDateEl) {
+      bannerDateEl.innerText = `${dayName.toUpperCase()}, ${dateNum} ${monthName.toUpperCase()} ${yearNum}`;
+    }
+  }
+
+  function loadDataJumat() {
+    const now = new Date();
+    updateBannerDate(now);
+
+    const dd = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const yyyy = now.getFullYear();
+    const todayKey = `${dd}/${mm}/${yyyy}`; 
+
+    const dataHariIni = jadwalKhotib[todayKey];
+    
+    if (dataHariIni) {
+      document.getElementById('load-khotib-imam').innerText = dataHariIni[0];
+      document.getElementById('load-bilal').innerText = dataHariIni[1];
+    } else {
+      // Default jika di luar jangkauan tanggal tes
+      document.getElementById('load-khotib-imam').innerText = jadwalKhotib["05/06/2026"][0];
+      document.getElementById('load-bilal').innerText = jadwalKhotib["05/06/2026"][1];
+    }
+  }
+  
+  window.addEventListener('DOMContentLoaded', loadDataJumat);
+</script> -->
 </body>
 </html>
