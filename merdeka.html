@@ -19,7 +19,7 @@ body{
   box-sizing: border-box;
 }
 
-/* KUNCI PERUBAHAN: Hanya SATU gambar ini yang aktif di tengah (STATIC) */
+/* KUNCI PERUBAHAN: Background gambar utama */
 #bg-container {
   position: absolute;
   top: 190px;       /* Tepat di bawah Header */
@@ -32,6 +32,7 @@ body{
   border-radius: 15px;
   box-shadow: inset 0 0 50px rgba(0,0,0,0.9); /* Efek gelap di tepi gambar agar teks terbaca */
   opacity: 0.85;    
+  transition: background 0.3s ease; /* Transisi halus saat gambar berubah */
 }
 
 /* HEADER */
@@ -215,7 +216,7 @@ body{
   to{transform:translateX(-100%)}
 }
 
-/* OVERLAY FULL SCREEN (KUNCI PERUBAHAN: Latar belakang dibuat hitam transparan agar gambar utama tetap terlihat) */
+/* OVERLAY FULL SCREEN */
 .overlay {
   position: fixed;
   top: 0;
@@ -234,7 +235,7 @@ body{
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85); /* Menggunakan warna hitam transparan, file jpg lain dihapus */
+  background: rgba(0, 0, 0, 0.85);
   z-index: -1;
 }
 
@@ -286,7 +287,7 @@ body{
   </div>
 </div>
 
-<!-- SINGLE STATIC BACKGROUND IMAGE -->
+<!-- SINGLE BACKGROUND IMAGE CONTAINER -->
 <div id="bg-container"></div>
 
 <!-- ================= HARI BESAR ISLAM ================= -->
@@ -314,7 +315,7 @@ body{
             *Update terakhir: 24 April 2026
         </div>
     </div>   
-</div>    
+</div>   
 
 <!-- ================= AREA BAWAH ================= -->
 <div class="footer-text">
@@ -351,7 +352,7 @@ body{
 
   <div class="marquee">
     <span>
-      “Sholat berjamaah lebih utama dua puluh tujuh derajat.”
+      “Sholat berjamaah lebih utama dua profesi tujuh derajat.”
       (HR. Bukhari & Muslim) —
       Mohon matikan atau silent handphone saat sholat berlangsung —
       Luruskan dan rapatkan shaf —
@@ -361,7 +362,7 @@ body{
   </div>
 </div>
 
-<!-- AUDIO & OVERLAYS (Sudah dibersihkan dari JPG asing) -->
+<!-- AUDIO & OVERLAYS -->
 <audio id="adzanAudio" src="beep.mp3"></audio>
 
 <div id="universalOverlay" class="overlay">
@@ -383,7 +384,7 @@ body{
 
 <div id="iqomahOverlay" class="overlay">
   <div class="overlay-bg"></div>
-  <div class="overlay-content"> <!-- Disamakan class agar konsisten -->
+  <div class="overlay-content">
     <div id="iqomahCountdownDisplay" class="countdown-large">10:00</div>
     <div class="overlay-text">MENJELANG IQOMAH</div>
   </div>
@@ -498,7 +499,7 @@ function updateCountdown(){
     next = { n: "Subuh", d: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, h, m, 0) };
   }
   const diff = next.d - now;
-  const totalDetik = Math.floor(diff / 1000);                                                     
+  const totalDetik = Math.floor(diff / 1000);                                                                      
   const h = String(Math.floor(diff / 3600000)).padStart(2,"0");
   const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2,"0");
   const s = String(Math.floor((diff % 60000) / 1000)).padStart(2,"0");
@@ -583,8 +584,11 @@ updateHariBesar();
 </script>
 
 <script>
-// Fitur Remote Keyboard & Marquee Memory
+// PENGATURAN REMOTE KEYBOARD
+let isPengumumanActive = false; // Status tracking untuk tombol 3
+
 document.addEventListener('keydown', (e) => {
+  // Tombol 1 atau Enter -> Fullscreen
   if (e.key === '1' || e.key === 'Enter') {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(err => console.error(err.message));
@@ -592,10 +596,28 @@ document.addEventListener('keydown', (e) => {
       document.exitFullscreen();
     }
   }
+  
+  // Tombol 2 -> Toggle Finansial
   if (e.key === '2') {
     const financeBox = document.querySelector('.finance-container');
     if (financeBox) financeBox.classList.toggle('active');
   }
+
+  // BARU: Tombol 3 -> Toggle Gambar Pengumuman 3
+  if (e.key === '3') {
+    const bgContainer = document.getElementById("bg-container");
+    if (!isPengumumanActive) {
+      bgContainer.style.background = 'url("pengumuman3.jpg") no-repeat center center';
+      bgContainer.style.backgroundSize = 'cover';
+      isPengumumanActive = true;
+    } else {
+      bgContainer.style.background = 'url("masjid1366.jpg") no-repeat center center';
+      bgContainer.style.backgroundSize = 'cover';
+      isPengumumanActive = false;
+    }
+  }
+  
+  // Tombol 9 -> Buka Modal Setting Marquee
   if (e.key === '9') {
     const modal = document.getElementById("configModal");
     if (modal.style.display === "none") {
@@ -605,6 +627,8 @@ document.addEventListener('keydown', (e) => {
       tutupConfig();
     }
   }
+  
+  // Tombol 0 -> Reset Settingan
   if (e.key === '0') {
     if (confirm("Apakah Anda yakin ingin mereset tampilan ke pengaturan awal?")) {
       localStorage.removeItem("marqueeTeks");
