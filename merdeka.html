@@ -2,37 +2,20 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=1366">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Display Jadwal Sholat - Masjid Jami' Baitul Muttaqin</title>
 
 <style>
 body{
-  margin: 0;
-  padding: 20px;
-  background: white; 
-  color: white;
-  font-family: Arial, sans-serif;
-  overflow: hidden; /* Mencegah scroll di layar STB */
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  box-sizing: border-box;
-}
+  margin:0;
+  padding:20px;
+  background:url("masjid2.jpg") no-repeat center center fixed;
+  background-size:cover;
+  color:white;
+  font-family:Arial, sans-serif;
+  text-shadow:1px 2px 4px rgba(0,0,0,.7);										  
 
-#bg-container {
-  position: absolute;
-  top: 190px;        
-  bottom: 170px;    
-  left: 20px;
-  right: 20px;
-  z-index: -1;      
-  background: url("masjid1366.jpg") no-repeat center center;
-  background-size: cover; 
-  border-radius: 15px;
-  box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
-  opacity: 0.85;    
-  transition: background 0.3s ease; 
-}
+}	
 /* HEADER */
 #headerTop{
   display: grid;
@@ -110,13 +93,13 @@ body{
   text-align:right;
   color:#ffd966;
 }
-/* ================= CSS LAPORAN KEUANGAN ================= */                                                    
+/* ================= CSS LAPORAN KEUANGAN ================= */													
 .main-content {
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-}            
+}			   
 
 .finance-container {
   position: absolute;
@@ -137,10 +120,10 @@ body{
     font-size: 1.5rem;
     color: #ffd966;
     margin-bottom: 15px;
-  text-align: center;                    
+  text-align: center;					 
     text-transform: uppercase;
     letter-spacing: 2px;
-  font-weight: bold;                    
+  font-weight: bold;					
 }
 
 .finance-grid {
@@ -295,20 +278,12 @@ th,td{
     text-transform: uppercase;
     letter-spacing: 5px;
 }
-.jadwal .box {
-  background-color: rgba(204, 0, 0, 0.8) !important;
-  border: 1px solid #cc0000 !important; 
-  border-radius: 10px !important;
-  color: white !important;
-}
 </style>
 
-<link id="theme-link" rel="stylesheet" href="style3.css">
+<link id="theme-link" rel="stylesheet" href="style2.css">
 </head>
 
 <body>
-
-<div id="bg-container"></div>
 
 <div id="headerTop">
   <div id="jamDigital">
@@ -347,7 +322,7 @@ th,td{
 <div class="sedekah-marquee-container" id="sedekahMarquee">
   <h2>
     <marquee bgcolor="#111111" behavior="" direction="">
-      BAGI JAMAAH DAN WARGA KP.MASJID RW.03 YG MAU SEDEKAH UNTUK ACARA SANTUNAN ANAK YATIM TGL 28 JUNI, BAIK BERUPA UANG ATAU MAKANAN/MINUMAN BISA MENGHUBUNGI PANITIA
+      BAGI JAMAAH DAN WARGA KP.MASJID RW.03 YG MAU SEDEKAH UNTUK ACARA PENGAJIAN TIAP AHAD PAGI, BAIK BERUPA UANG ATAU MAKANAN/MINUMAN BISA MENGHUBUNGI PANITIA
     </marquee>
   </h2>
 </div>
@@ -355,7 +330,7 @@ th,td{
 <div id="configModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:100000; justify-content:center; align-items:center;">
   <div style="background:#f4f4f4; color:#333; padding:25px; border-radius:15px; width:400px; box-shadow:0 10px 30px rgba(0,0,0,0.5); font-family: sans-serif;">
     <h3 style="margin-top:0; border-bottom:2px solid #ccc; padding-bottom:10px;">Pengaturan Tampilan</h3>
-      
+     
     <div style="margin-bottom:20px;">
       <label style="display:block; font-weight:bold; margin-bottom:5px;">Teks Berjalan (Footer):</label>
       <textarea id="inputMarquee" rows="3" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:5px; box-sizing:border-box;"></textarea>
@@ -441,9 +416,6 @@ th,td{
 
 
 <script>
-  // TAMBAHAN: Deklarasi variabel isPengumumanActive agar tombol 3 & 5 tidak menyebabkan Error
-  let isPengumumanActive = false;
-
   // Pemicu Tombol Keyboard Terintegrasi (Mencegah Crash / Saling Bentrok)
   document.addEventListener('keydown', (e) => {
     const financeBox = document.querySelector('.finance-container');
@@ -468,29 +440,21 @@ th,td{
 
     // Tombol 3: Pengumuman 3
     if (e.key === '3') {
-      const bgContainer = document.getElementById("bg-container");
-      if (!isPengumumanActive) {
-        bgContainer.style.background = 'url("pengumuman3.jpg") no-repeat center center';
-        bgContainer.style.backgroundSize = 'cover';
-        isPengumumanActive = true;
-      } else {
-        bgContainer.style.background = 'url("masjid1366.jpg") no-repeat center center';
-        bgContainer.style.backgroundSize = 'cover';
-        isPengumumanActive = false;
+      if (announceBox3) {
+        announceBox3.classList.toggle('active');
+        if (announceBox5) announceBox5.classList.remove('active');
+        if (financeBox) financeBox.classList.remove('active');
+        if (sedekahBox) sedekahBox.classList.remove('active');
       }
     }
             
     // Tombol 5: Pengumuman 5
     if (e.key === '5') {
-      const bgContainer = document.getElementById("bg-container");
-      if (!isPengumumanActive) {
-        bgContainer.style.background = 'url("pengumuman5.jpg") no-repeat center center';
-        bgContainer.style.backgroundSize = 'cover';
-        isPengumumanActive = true;
-      } else {
-        bgContainer.style.background = 'url("masjid1366.jpg") no-repeat center center';
-        bgContainer.style.backgroundSize = 'cover';
-        isPengumumanActive = false;
+      if (announceBox5) {
+        announceBox5.classList.toggle('active');
+        if (announceBox3) announceBox3.classList.remove('active');
+        if (financeBox) financeBox.classList.remove('active');
+        if (sedekahBox) sedekahBox.classList.remove('active');
       }
     }
 
@@ -508,10 +472,10 @@ th,td{
     if (e.key === '7') {
       const theme = document.getElementById("theme-link");
       if (theme) {
-        if (theme.getAttribute("href") === "style3.css") {
+        if (theme.getAttribute("href") === "style2.css") {
           theme.setAttribute("href", "style-K.css");
         } else {
-          theme.setAttribute("href", "style3.css");
+          theme.setAttribute("href", "style2.css");
         }
       }
     }
@@ -599,7 +563,7 @@ setInterval(() => {
   const hijriMonths = ["Muharram","Safar","Rabiul Awal","Rabiul Akhir","Jumadil Awal","Jumadil Akhir","Rajab","Sya'ban","Ramadhan","Syawal","Dzulqaidah","Dzulhijjah"];
 
   const d = new Date();
-  d.setDate(d.getDate() - 0);             
+  d.setDate(d.getDate() - 0);						   
   const fmt = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', { day:'numeric', month:'numeric', year:'numeric', weekday:'long' });
 
   const parts = fmt.formatToParts(d);
@@ -698,7 +662,7 @@ function updateCountdown(){
   }
 
   const diff = next.d - now;
-  const totalDetik = Math.floor(diff / 1000);                      
+  const totalDetik = Math.floor(diff / 1000);											 
   const h = String(Math.floor(diff / 3600000)).padStart(2,"0");
   const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2,"0");
   const s = String(Math.floor((diff % 60000) / 1000)).padStart(2,"0");
@@ -783,6 +747,15 @@ function updateHariBesar(){
   if(hbText && dekat) hbText.textContent = `${dekat.n} — ${sel} hari lagi`;
 }
 updateHariBesar();
+</script>
+
+<script>
+const bg = ["masjid2.jpg","M21.jpg"];
+let idx = 0;
+setInterval(() => {
+  document.body.style.backgroundImage = `url('${bg[idx]}')`;
+  idx = (idx+1) % bg.length;
+}, 15000);
 </script>
 
 <script>
