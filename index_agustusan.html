@@ -9,7 +9,7 @@
 body{
   margin:0;
   padding:20px;
-  background:url("merahputih.jpg") no-repeat center center fixed;
+  background:url("masjid2.jpg") no-repeat center center fixed;
   background-size:cover;
   color:white;
   font-family:Arial, sans-serif;
@@ -280,7 +280,7 @@ th,td{
 }
 </style>
 
-<link id="theme-link" rel="stylesheet" href="style2.css">
+<link id="theme-link" rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -471,10 +471,10 @@ th,td{
     if (e.key === '7') {
       const theme = document.getElementById("theme-link");
       if (theme) {
-        if (theme.getAttribute("href") === "style2.css") {
+        if (theme.getAttribute("href") === "style.css") {
           theme.setAttribute("href", "style-K.css");
         } else {
-          theme.setAttribute("href", "style2.css");
+          theme.setAttribute("href", "style.css");
         }
       }
     }
@@ -749,7 +749,7 @@ updateHariBesar();
 </script>
 
 <script>
-const bg = ["merahputih.jpg"];
+const bg = ["masjid2.jpg","M21.jpg"];
 let idx = 0;
 setInterval(() => {
   document.body.style.backgroundImage = `url('${bg[idx]}')`;
