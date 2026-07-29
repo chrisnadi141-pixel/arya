@@ -308,10 +308,8 @@ body {
 
     // Tombol 1: Fullscreen Toggle
     if (e.key === '1') {
-    let d = document.documentElement;
-    (d.requestFullscreen || d.webkitRequestFullscreen).call(d);
-     }
-   });
+      toggleFullscreen();
+    }
 
     // Tombol 2: Laporan Keuangan
     if (e.key === '2') {
@@ -387,7 +385,12 @@ body {
       document.exitFullscreen();
     }
   }
- </script>
+
+  // Klik Layar untuk Fullscreen
+  document.addEventListener('click', () => {
+    toggleFullscreen();
+  });
+</script>
 
 <script>
 setInterval(() => {
