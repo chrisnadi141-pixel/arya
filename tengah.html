@@ -308,8 +308,10 @@ body {
 
     // Tombol 1: Fullscreen Toggle
     if (e.key === '1') {
-      toggleFullscreen();
-    }
+    let d = document.documentElement;
+    (d.requestFullscreen || d.webkitRequestFullscreen).call(d);
+     }
+   });
 
     // Tombol 2: Laporan Keuangan
     if (e.key === '2') {
