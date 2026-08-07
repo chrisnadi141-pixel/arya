@@ -65,7 +65,7 @@ body {
 .quote-box {
   width: 100%;
   max-width: 1600px;
-  height: 500px;
+  height: 730px;
   border-radius: 35px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   background-color: #1a1a1e;
@@ -115,10 +115,11 @@ body {
   background: rgba(0,0,0,.45);
   padding: 15px 30px;
   border-radius: 18px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   box-sizing: border-box;
   width: 100%;
   overflow: hidden; 
+  flex-shrink: 0;
 }
 
 #jamDigital {
@@ -126,6 +127,7 @@ body {
   font-weight: 900;
   color: #00ffff;
   text-shadow: 0 0 15px rgba(0,255,255,.9);
+  line-height: 1;
 }
 .kedip { animation: blink 1s steps(2, start) infinite; }
 @keyframes blink { to { visibility: hidden; } }
@@ -135,7 +137,7 @@ body {
   min-width: 0; 
   overflow: hidden;
 }
-#masjidName { font-size:1.8rem; font-weight:900; }
+#masjidName { font-size:2.6rem; font-weight:900; line-height: 1.2; }
 
 #alamatWrapper {
   overflow: hidden;
@@ -156,8 +158,8 @@ body {
   text-align: right;
   min-width: 0; 
 }
-#tanggalDisplay { font-size:1.2rem; }
-#hijriDisplay { font-size:1.1rem; color:#ffd966; }
+#tanggalDisplay { font-size:1.5rem;   line-height: 1.3; }
+#hijriDisplay { font-size:1.1rem; color:#ffd966; line-height: 1.3; line-height: 1.3; }
 
 /* HARI BESAR */
 #hariBesarBox {
@@ -174,7 +176,12 @@ body {
   color: #ffd966;
   z-index: 10;
 }
-
+.footer-text {
+  background: rgba(0,0,0,.85);
+  padding-top: 5px;
+  z-index: 10;
+  flex-shrink: 0;
+}
 /* ================= OVERLAY FULL SCREEN (IQOMAH / ADZAN) ================= */
 .overlay {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -185,7 +192,7 @@ body {
 .countdown-large { font-size: 8rem; font-weight: 900; color: #ffffff; text-shadow: 0 0 30px rgba(0,0,0,1); }
 .overlay-text { font-size: 3rem; font-weight: bold; letter-spacing: 5px; }
 </style>
-<link id="theme-link" rel="stylesheet" href="style4.css">
+<link id="theme-link" rel="stylesheet" href="style5.css">
 </head>
 <body>
 
@@ -361,10 +368,10 @@ body {
     if (e.key === '7') {
       const theme = document.getElementById("theme-link");
       if (theme) {
-        if (theme.getAttribute("href") === "style4.css") {
+        if (theme.getAttribute("href") === "style5.css") {
           theme.setAttribute("href", "style-K.css");
         } else {
-          theme.setAttribute("href", "style4.css");
+          theme.setAttribute("href", "style5.css");
         }
       }
     }
