@@ -53,8 +53,8 @@ html, body {
 /* ================= 3. STYLING JADWAL SHOLAT ================= */
 .countdown{
   position:absolute;           
-  bottom:140px;                
-  right:10px;                  
+  bottom:90px;                
+  left:10px;                  
   background:rgba(0,0,0,.55);
   padding:10px 14px;
   border-radius:12px;
