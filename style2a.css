@@ -24,7 +24,7 @@ body::before{
 /* ================= JADWAL SHOLAT ================= */
 .countdown{
   position:absolute;           
-  bottom:30px;                
+  bottom:60px;                
   left:10px;                  
   background:rgba(0,0,0,.55);
   padding:10px 14px;
@@ -37,18 +37,16 @@ body::before{
 }
 
 .jadwal {
-  position: absolute;
-  bottom: 60px;     
-  right: 0;       /* pindah ke kanan */
+  margin-top: auto;          
   display: flex;
-  flex-direction: column;  /* box jadi vertikal */
-  gap: 5px;
-  width: 110px;   /* atur lebar sesuai kebutuhan */
+  flex-direction: row;       
+  gap: 15px;
 }
 
 .box {
   flex: 1;               
   text-align: center;
+  border-radius: 12px;
 }
 
 .box span {
@@ -62,15 +60,14 @@ body::before{
 }
 
 /* WARNA TIAP SHOLAT */
-.imsak    { background: #607d8b; }
-.subuh    { background: #2196f3; }
-.dzuhur   { background: #4caf50; }
-.ashar    { background: #ff9800; }
-.maghrib  { background: #f44336; }
-.isya     { background: #673ab7; }
-
+.imsak    { background: #e53935; color: white; }
+.subuh    { background: white; color: #222; }
+.dzuhur   { background: #e53935; color: white; }
+.ashar    { background: white; color: #222; }
+.maghrib  { background: #e53935; color: white; }
+.isya     { background: white; color: #222; }
 /* tambah text berjalan */
-.marquee {
+/*.marquee {
   width: 100%;
   overflow: hidden;
   background: rgba(0,0,0,0.7);
@@ -78,7 +75,7 @@ body::before{
   border-radius: 8px;
 }
 
-.marquee span {
+/*.marquee span {
   display: inline-block;
   white-space: nowrap;
   padding-left: 100%;
@@ -108,4 +105,3 @@ body::before{
   text-align: center;
   padding: 10px;
 }
-
