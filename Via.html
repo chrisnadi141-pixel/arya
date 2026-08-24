@@ -19,7 +19,7 @@
   z-index: 1;
   width: 100%;
   max-width: 1280px;
-  height: 80vh;
+  height: 48vh; /* Atau ganti dengan 360px */
   border-radius: 25px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   background-color: #1a1a1e;
@@ -78,20 +78,6 @@ body {
   border-radius: 35px;
 }
 
-/* Video Live Streaming di dalam Quote Box */
-#streamVideo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: #00ff00;
-  border-radius: 35px;
-  display: none;
-  z-index: 2;
-}
-
 /* Teks Overlay pada Gambar */
 .quote-overlay-text {
   position: absolute;
@@ -108,7 +94,7 @@ body {
   line-height: 1.5;
   border-radius: 35px;
   color: #00ff00;
-  z-index: 3;
+  z-index: 3;			 
 }
 
 .quote-overlay-text.active {
@@ -195,16 +181,42 @@ body {
   z-index: 10;
   flex-shrink: 0;
 }
-/* ================= OVERLAY FULL SCREEN (IQOMAH / ADZAN) ================= */
+/* ================= OVERLAY FULL SCREEN (IQOMAH / ADZAN / STREAMING) ================= */
 .overlay {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   display: none; justify-content: center; align-items: center; z-index: 999999;
 }
-.overlay-bg { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: -1; }
 .overlay img { position: absolute; width:100%; height:100%; object-fit:cover; filter: brightness(0.4); z-index: -1; }
-.overlay-content { text-align: center; color: white; position: relative; z-index: 1000000; }
+.overlay-content { text-align: center; color: white; }
 .countdown-large { font-size: 8rem; font-weight: 900; color: #ffffff; text-shadow: 0 0 30px rgba(0,0,0,1); }
 .overlay-text { font-size: 3rem; font-weight: bold; letter-spacing: 5px; }
+
+/* Styles Khusus Overlay Live Streaming Video */
+#streamOverlay {
+  background: rgba(0, 0, 0, 0.95);
+  flex-direction: column;
+}
+.video-container {
+  width: 90%;
+  max-width: 1200px;
+  background: #000000;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,210,255,0.4);
+  border: 2px solid #00d2ff;
+}
+.video-container video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.stream-title {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffd966;
+  text-align: center;
+}
 </style>
 <link id="theme-link" rel="stylesheet" href="style-S.css">
 </head>
@@ -236,11 +248,10 @@ body {
   <span id="hariBesarText">Memuat hari besar Islam...</span>
 </div>
 
-<!-- ================= BAGIAN TENGAH UTAMA (GAMBAR MASJID, STREAMING & PENGUMUMAN) ================= -->
+<!-- ================= BAGIAN TENGAH UTAMA (GAMBAR MASJID & PENGUMUMAN) ================= -->
 <div class="main-content">
   <div class="quote-box">
     <img id="gambarTengah" src="masjid2.jpg" alt="Gambar Utama">
-    <video id="streamVideo" controls playsinline></video>
     <div class="quote-overlay-text" id="quoteOverlay">
       <marquee behavior="scroll" direction="left" scrollamount="8">
         BAGI JAMAAH KP.MASJID RW.03 YG MAU SEDEKAH UNTUK ACARA PENGAJIAN TIAP AHAD PAGI, BAIK BERUPA UANG ATAU MAKANAN BISA MENGHUBUNGI PENGURUS/PANITIA MASJID
@@ -281,7 +292,7 @@ body {
     Memuat...
   </div>
 
-  <!--<div class="marquee">
+  <div class="marquee">
     <span>
       Sholat berjamaah lebih utama dua puluh tujuh derajat.”
       (HR. Bukhari & Muslim) —
@@ -298,7 +309,6 @@ body {
 
 <div id="universalOverlay" class="overlay">
   <div class="overlay-bg"></div>
-  <img src="iqomah.jpg" alt="Iqomah Background" style="display:none;" id="imgIqomahBg">
   <div class="overlay-content">
     <div id="overlayCountdown" class="countdown-large">00:00</div>
     <div id="overlayStatus" class="overlay-text">MENUJU ADZAN</div>
@@ -321,40 +331,46 @@ body {
   </div>
 </div>
 
-<!-- ================= SCRIPT LOGIKA ================= -->
-<script>
-  let hlsInstance = null;
-  let isNearAdzan = false; // Flag penanda 5 menit sebelum adzan / mode iqomah
-  const streamUrl = 'https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8';
+<!-- Overlay Live Streaming (Tombol 4) -->
+<div id="streamOverlay" class="overlay">
+  <div class="video-container">
+    <video id="streamVideo" controls playsinline></video>
+  </div>
+</div>
 
-  function stopStreaming() {
-    const video = document.getElementById('streamVideo');
-    video.style.display = 'none';
-    video.pause();
-    if (hlsInstance) {
-      hlsInstance.destroy();
-      hlsInstance = null;
+<!-- ================= SCRIPT LOGIKA (KORPORASI LAMA & CROSS-BROWSER COMPATIBLE) ================= -->
+<script>
+  // Helper padStart versi ES5 agar kompatibel dengan browser lama
+  function padLeft(val, len) {
+    var str = String(val);
+    while (str.length < len) {
+      str = '0' + str;
     }
+    return str;
   }
 
+  var hlsInstance = null;
+  var streamUrl = 'https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8';
+
   function toggleStreaming() {
-    if (isNearAdzan) return; // Mencegah aktivasi streaming saat countdown adzan
+    var streamOverlay = document.getElementById('streamOverlay');
+    var video = document.getElementById('streamVideo');
 
-    const video = document.getElementById('streamVideo');
-    const imgTengah = document.getElementById('gambarTengah');
-
-    if (video.style.display === 'block') {
-      stopStreaming();
-      imgTengah.style.display = 'block';
+    if (streamOverlay.style.display === 'flex') {
+      streamOverlay.style.display = 'none';
+      video.pause();
+      if (hlsInstance) {
+        hlsInstance.destroy();
+        hlsInstance = null;
+      }
     } else {
-      video.style.display = 'block';
-      imgTengah.style.display = 'block';
-      if (Hls.isSupported()) {
+      streamOverlay.style.display = 'flex';
+      if (typeof Hls !== 'undefined' && Hls.isSupported()) {
         hlsInstance = new Hls();
         hlsInstance.loadSource(streamUrl);
         hlsInstance.attachMedia(video);
         hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-          video.play().catch(e => console.log("Autoplay blocked:", e));
+          video.play();
         });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = streamUrl;
@@ -365,27 +381,22 @@ body {
     }
   }
 
-  // Pemicu Tombol Keyboard Terintegrasi
-  document.addEventListener('keydown', (e) => {
-    const quoteOverlay = document.getElementById('quoteOverlay');
-    const imgTengah = document.getElementById('gambarTengah');
+  document.addEventListener('keydown', function(e) {
+    var quoteOverlay = document.getElementById('quoteOverlay');
+    var imgTengah = document.getElementById('gambarTengah');
+    var key = e.key || e.keyCode;
 
-    // Tombol 1: Fullscreen Toggle (Tetap diizinkan)
-    if (e.key === '1') {
-      toggleFullscreen();
-    }
-    
-    // BLOKIR TOMBOL 3, 4, 5 JIKA DALAM MASA 5 MENIT MENUJU ADZAN / IQOMAH
-    if (isNearAdzan && ['3', '4', '5'].includes(e.key)) {
-      console.log('Fitur pengumuman dan streaming dinonaktifkan menjelang adzan.');
-      return;
+    if (key === '1' || key === 49) toggleFullscreen();
+
+    if (key === '2' || key === 50) {
+      if (typeof financeBox !== 'undefined' && financeBox) {
+        financeBox.classList.toggle('active');
+        if(quoteOverlay) quoteOverlay.classList.remove('active');
+      }
     }
 
-    // Tombol 3: Ganti Gambar Tengah ke Pengumuman 3
-    if (e.key === '3') {
-      stopStreaming();
+    if (key === '3' || key === 51) {
       if (imgTengah) {
-        imgTengah.style.display = 'block';
         if (imgTengah.getAttribute('src') === 'pengumuman3.jpg') {
           imgTengah.setAttribute('src', 'masjid2.jpg');
         } else {
@@ -394,16 +405,10 @@ body {
       }
     }
 
-    // Tombol 4: Live Streaming Video Makkah
-    if (e.key === '4') {
-      toggleStreaming();
-    }
-        
-    // Tombol 5: Ganti Gambar Tengah ke Pengumuman 5
-    if (e.key === '5') {
-      stopStreaming();
+    if (key === '4' || key === 52) toggleStreaming();
+
+    if (key === '5' || key === 53) {
       if (imgTengah) {
-        imgTengah.style.display = 'block';
         if (imgTengah.getAttribute('src') === 'pengumuman5.jpg') {
           imgTengah.setAttribute('src', 'masjid2.jpg');
         } else {
@@ -412,22 +417,19 @@ body {
       }
     }
 
-    // Tombol 6: Tampilkan / Sembunyikan Running Text
-    if (e.key === '6') {
+    if (key === '6' || key === 54) {
       if (quoteOverlay) {
         quoteOverlay.classList.toggle('active');
         if (typeof financeBox !== 'undefined' && financeBox) financeBox.classList.remove('active');
-
-        const marqueeEl = quoteOverlay.querySelector('marquee');
+        var marqueeEl = quoteOverlay.querySelector('marquee');
         if (marqueeEl && quoteOverlay.classList.contains('active')) {
           marqueeEl.start();
         }
       }
     }
 
-    // Tombol 7: Ganti Tema CSS
-    if (e.key === '7') {
-      const theme = document.getElementById("theme-link");
+    if (key === '7' || key === 55) {
+      var theme = document.getElementById("theme-link");
       if (theme) {
         if (theme.getAttribute("href") === "style2a.css") {
           theme.setAttribute("href", "style-S.css");
@@ -437,25 +439,23 @@ body {
       }
     }
 
-    // Tombol Enter untuk STB / Remote
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      toggleFullscreen();
-    }
+    if (key === 'Enter' || key === 13) toggleFullscreen();
   }); 
 
-  // Fungsi Fullscreen
   function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((err) => {
-        console.error(`Gagal masuk mode fullscreen: ${err.message}`);
-      });
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement) {
+      var docElm = document.documentElement;
+      if (docElm.requestFullscreen) { docElm.requestFullscreen(); }
+      else if (docElm.webkitRequestFullScreen) { docElm.webkitRequestFullScreen(); }
+      else if (docElm.mozRequestFullScreen) { docElm.mozRequestFullScreen(); }
     } else {
-      document.exitFullscreen();
+      if (document.exitFullscreen) { document.exitFullscreen(); }
+      else if (document.webkitCancelFullScreen) { document.webkitCancelFullScreen(); }
+      else if (document.mozCancelFullScreen) { document.mozCancelFullScreen(); }
     }
   }
 
-  // Klik Layar untuk Fullscreen
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', function(e) {
     if (e.target.tagName !== 'VIDEO') {
       toggleFullscreen();
     }
@@ -475,7 +475,9 @@ function getHijriDate(date) {
   }
   var a = Math.floor(y / 100);
   var b = 2 - a + Math.floor(a / 4);
-  var jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + b - 1524.5;
+  // Menambahkan offset +32 hari agar 7 Safar maju menjadi 10 Rabiul Awal
+var jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + b - 1524.5 + 32;
+
   
   var z = jd - 1948439.5;
   var cyc = Math.floor(z / 10631);
@@ -511,38 +513,48 @@ setInterval(function() {
      hijriDisplay.innerHTML = hData.day + " " + hijriMonths[hData.month - 1] + " " + hData.year + " H";
   }
 }, 1000);  
-</script>  
-
+</script>
 
 <script src="sudi_2026.js"></script>
 <script>
 function parseCSV(text){
-  const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
-  lines.shift();
-  return lines.map(line=>{
-    const cells=[], cur={v:"",q:false};
-    for(let c of line){
-      if(c=='"'){cur.q=!cur.q;continue;}
-      if(c==',' && !cur.q){cells.push(cur.v);cur.v='';continue;}
-      cur.v+=c;
+  var lines = text.split(/\r?\n/);
+  var result = [];
+  for(var i=0; i<lines.length; i++) {
+    if(lines[i].trim() !== "") {
+      if(i === 0) continue; // Skip Header
+      var cells = [], cur = {v:"", q:false};
+      var line = lines[i];
+      for(var j=0; j<line.length; j++){
+        var c = line[j];
+        if(c === '"'){cur.q = !cur.q; continue;}
+        if(c === ',' && !cur.q){cells.push(cur.v.trim()); cur.v=''; continue;}
+        cur.v += c;
+      }
+      cells.push(cur.v.trim());
+      result.push(cells);
     }
-    cells.push(cur.v);
-    return cells.map(c=>c.trim());
-  });
+  }
+  return result;
 }
 
 if (typeof rawData !== 'undefined') {
-  const rows = parseCSV(rawData);
+  var rows = parseCSV(rawData);
   function getTodayRow(){
-    const now = new Date();
-    const d = String(now.getDate()).padStart(2,'0');
-    const m = String(now.getMonth()+1).padStart(2,'0');
-    const y = now.getFullYear();
-    const today = `${d}/${m}/${y}`;
-    return rows.find(r => r[0].includes(today));
+    var now = new Date();
+    var d = padLeft(now.getDate(), 2);
+    var m = padLeft(now.getMonth()+1, 2);
+    var y = now.getFullYear();
+    var todayStr = d + "/" + m + "/" + y;
+    for(var k=0; k<rows.length; k++) {
+      if(rows[k][0] && rows[k][0].indexOf(todayStr) !== -1) {
+        return rows[k];
+      }
+    }
+    return null;
   }
 
-  const today = getTodayRow();
+  var today = getTodayRow();
   if(today){
     document.getElementById("imsak").textContent   = today[1];
     document.getElementById("subuh").textContent   = today[2];
@@ -552,29 +564,29 @@ if (typeof rawData !== 'undefined') {
     document.getElementById("isya").textContent    = today[6];
 
     window.jadwal = {
-      subuh:today[2],
-      dzuhur:today[3],
-      ashar:today[4],
-      maghrib:today[5],
-      isya:today[6]
+      subuh: today[2],
+      dzuhur: today[3],
+      ashar: today[4],
+      maghrib: today[5],
+      isya: today[6]
     };
   }
 }
 </script>
 
 <script>
-let modeIqomahActive = false;
-let sedangProses = false;
-let statusAdzan = {};
-const hariIni = new Date().getDay(); 
+var modeIqomahActive = false;
+var sedangProses = false;
+var statusAdzan = {};
+var hariIni = new Date().getDay(); 
 
 function updateCountdown(){
   if(!window.jadwal) return;
 
-  const now = new Date(new Date().getTime() + 48000);
-  const today = new Date();
+  var now = new Date(new Date().getTime() + 28000);
+  var today = new Date();
 
-  const list = [
+  var list = [
     { n:"Subuh",   t: jadwal.subuh },
     { n:"Dzuhur",  t: jadwal.dzuhur },
     { n:"Ashar",   t: jadwal.ashar },
@@ -582,101 +594,86 @@ function updateCountdown(){
     { n:"Isya",    t: jadwal.isya }
   ];
 
-  let next = null;
-  list.forEach(j => {
-    const [h,m] = j.t.split(":");
-    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate(), h, m, 0);
+  var next = null;
+  for(var i=0; i<list.length; i++) {
+    var j = list[i];
+    var parts = j.t.split(":");
+    var d = new Date(today.getFullYear(), today.getMonth(), today.getDate(), parseInt(parts[0], 10), parseInt(parts[1], 10), 0);
     if(d > now && !next){
-      next = {...j, d};
+      next = { n: j.n, t: j.t, d: d };
     }
-  });
+  }
 
   if(!next){
-    const [h,m] = jadwal.subuh.split(":");
-    const besokSubuh = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, h, m, 0);
+    var partsSubuh = jadwal.subuh.split(":");
+    var besokSubuh = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, parseInt(partsSubuh[0], 10), parseInt(partsSubuh[1], 10), 0);
     next = { n: "Subuh", d: besokSubuh };
   }
 
-  const diff = next.d - now;
-  const totalDetik = Math.floor(diff / 1000);                                              
-  const h = String(Math.floor(diff / 3600000)).padStart(2,"0");
-  const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2,"0");
-  const s = String(Math.floor((diff % 60000) / 1000)).padStart(2,"0");
+  var diff = next.d - now;
+  var totalDetik = Math.floor(diff / 1000);                                             
+  var h = padLeft(Math.floor(diff / 3600000), 2);
+  var m = padLeft(Math.floor((diff % 3600000) / 60000), 2);
+  var s = padLeft(Math.floor((diff % 60000) / 1000), 2);
 
-  const countdownElement = document.getElementById("countdown");
-  if(countdownElement) countdownElement.textContent = `${next.n.toUpperCase()} :  ${h}: ${m}: ${s}`;
+  var countdownElement = document.getElementById("countdown");
+  if(countdownElement) countdownElement.textContent = next.n.toUpperCase() + " : " + h + ": " + m + ": " + s;
 
-  const overlay = document.getElementById("universalOverlay");
-  const overlayCD = document.getElementById("overlayCountdown");
-  const overlayStatus = document.getElementById("overlayStatus");
-  const imgIqomahBg = document.getElementById("imgIqomahBg");
-  const jumatOverlay = document.getElementById("jumatOverlay");
-  const jumatCD = document.getElementById("jumatCountdown");
-  const beep = document.getElementById("beepAudio");
+  var overlay = document.getElementById("universalOverlay");
+  var overlayCD = document.getElementById("overlayCountdown");
+  var overlayStatus = document.getElementById("overlayStatus");
+  var jumatOverlay = document.getElementById("jumatOverlay");
+  var jumatCD = document.getElementById("jumatCountdown");
+  var beep = document.getElementById("beepAudio");
 
   overlay.style.display = "none";
   jumatOverlay.style.display = "none";
 
-  // LOGIKA OVERLAY & LOCKING
   if(totalDetik <= 300 && totalDetik > 0){
-    // AKTIFKAN LOCKING & HENTIKAN STREAMING
-    isNearAdzan = true;
-    stopStreaming();
-
     if(hariIni === 5 && next.n === "Dzuhur"){
       jumatOverlay.style.display = "flex";
-      jumatCD.textContent = `${m}:${s}`;
+      jumatCD.textContent = m + ":" + s;
     } else {
       overlay.style.display = "flex";
-      if(imgIqomahBg) imgIqomahBg.style.display = "block";
       overlayStatus.textContent = "MENUJU ADZAN";
-      overlayCD.textContent = `${m}:${s}`;
+      overlayCD.textContent = m + ":" + s;
       overlayCD.style.color = "white"; 
     }
   }
   else if(totalDetik === 0){
-    isNearAdzan = true;
-    stopStreaming();
     if(beep) beep.play();
     if(hariIni === 5 && next.n === "Dzuhur"){
       modeIqomahActive = false;
       jumatOverlay.style.display = "flex";
     } else {
-      setTimeout(()=>{
+      setTimeout(function(){
         modeIqomahActive = true;
         window.iqomahEnd = new Date().getTime() + 480000; 
       }, 5000);
     }
   }
   else if(modeIqomahActive){
-    isNearAdzan = true;
-    stopStreaming();
-    const sisa = window.iqomahEnd - new Date().getTime();
+    var sisa = window.iqomahEnd - new Date().getTime();
     if(sisa > 0){
       overlay.style.display = "flex";
-      if(imgIqomahBg) imgIqomahBg.style.display = "block";
       overlayStatus.textContent = "MENUJU IQOMAH";
       overlayStatus.style.color = "white";
       overlayStatus.style.fontSize = "4rem";       
       overlayStatus.style.letterSpacing = "5px";   
-      const im = String(Math.floor(sisa/60000)).padStart(2,"0");
-      const is = String(Math.floor((sisa%60000)/1000)).padStart(2,"0");
-      overlayCD.textContent = `${im}:${is}`;
+      var im = padLeft(Math.floor(sisa/60000), 2);
+      var is = padLeft(Math.floor((sisa%60000)/1000), 2);
+      overlayCD.textContent = im + ":" + is;
     } else {
       overlay.style.display = "none";
       modeIqomahActive = false;
-      isNearAdzan = false; // BUKA KEMBALI LOCKING
     }
-  } else {
-    // KONDISI NORMAL (JAUH DARI WAKTU ADZAN)
-    isNearAdzan = false;
   }
 }
 setInterval(updateCountdown, 1000);
 </script>
 
 <script>
-const hariBesar = [
+var hariBesar = [
   {n:"Isra Mi'raj Nabi (ﷺ)",m:1,d:16},
   {n:"Awal Ramadhan",m:2,d:19},
   {n:"Nuzulul Qur'an",m:3,d:7},
@@ -687,37 +684,41 @@ const hariBesar = [
 ];
 
 function updateHariBesar(){
-  const now = new Date();
-  let dekat = null, sel = 9999;
-  hariBesar.forEach(h => {
-    let t = new Date(now.getFullYear(), h.m-1, h.d);
+  var now = new Date();
+  var dekat = null, sel = 9999;
+  for(var i=0; i<hariBesar.length; i++) {
+    var h = hariBesar[i];
+    var t = new Date(now.getFullYear(), h.m-1, h.d);
     if (t < now) t.setFullYear(t.getFullYear()+1);
-    let s = Math.ceil((t-now)/86400000);
+    var s = Math.ceil((t-now)/86400000);
     if (s < sel){ sel = s; dekat = h; }
-  });
-  const hbText = document.getElementById("hariBesarText");
-  if(hbText && dekat) hbText.textContent = `${dekat.n} — ${sel} hari lagi`;
+  }
+  var hbText = document.getElementById("hariBesarText");
+  if(hbText && dekat) hbText.textContent = dekat.n + " — " + sel + " hari lagi";
 }
 updateHariBesar();
 </script>
 
 <script>
-setInterval(() => {
+setInterval(function() {
   if (!window.jadwal || sedangProses) return;
-  const now = new Date(new Date().getTime() + 28000);
-  const jamSekarang = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-  ["subuh","dzuhur","ashar","maghrib","isya"].forEach(w => {
+  var now = new Date(new Date().getTime() + 28000);
+  var jamSekarang = padLeft(now.getHours(), 2) + ":" + padLeft(now.getMinutes(), 2);
+  var waktuArr = ["subuh","dzuhur","ashar","maghrib","isya"];
+  
+  for(var i=0; i<waktuArr.length; i++) {
+    var w = waktuArr[i];
     if (window.jadwal[w] === jamSekarang && !statusAdzan[w]) {
       sedangProses = true;
       statusAdzan[w] = true;
-      const audio = document.getElementById("adzanAudio");
-      if(audio) audio.play().catch(e => {});
+      var audio = document.getElementById("adzanAudio");
+      if(audio) audio.play();
     }
-  });
+  }
 }, 1000);
 
-setInterval(() => {
-  const n = new Date();
+setInterval(function() {
+  var n = new Date();
   if(n.getHours() === 0 && n.getMinutes() === 0) statusAdzan = {};
 }, 60000);
 </script>
