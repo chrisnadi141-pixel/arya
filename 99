@@ -240,7 +240,7 @@ body {
 <!-- ================= BAGIAN TENGAH UTAMA (GAMBAR MASJID, STREAMING & PENGUMUMAN) ================= -->
 <div class="main-content">
   <div class="quote-box">
-    <img id="gambarTengah" src="masjid2.jpg" alt="Gambar Utama">
+    <img id="gambarTengah" src="nabawi1.jpg" alt="Gambar Utama">
     <video id="streamVideo" controls playsinline></video>
     <div class="quote-overlay-text" id="quoteOverlay">
       <marquee behavior="scroll" direction="left" scrollamount="8">
@@ -365,7 +365,7 @@ body {
       if (imgTengah) {
         imgTengah.style.display = 'block';
         if (imgTengah.getAttribute('src') === 'pengumuman3.jpg') {
-          imgTengah.setAttribute('src', 'masjid2.jpg');
+          imgTengah.setAttribute('src', 'nabawi1.jpg');
         } else {
           imgTengah.setAttribute('src', 'pengumuman3.jpg');
         }
@@ -381,7 +381,7 @@ body {
       if (imgTengah) {
         imgTengah.style.display = 'block';
         if (imgTengah.getAttribute('src') === 'pengumuman5.jpg') {
-          imgTengah.setAttribute('src', 'masjid2.jpg');
+          imgTengah.setAttribute('src', 'nabawi1.jpg');
         } else {
           imgTengah.setAttribute('src', 'pengumuman5.jpg');
         }
