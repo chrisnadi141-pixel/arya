@@ -24,7 +24,7 @@ body::before{
 /* ================= JADWAL SHOLAT ================= */
 .countdown{
   position:absolute;           
-  bottom:60px;                
+  bottom:70px;                
   left:10px;                  
   background:rgba(0,0,0,.55);
   padding:10px 14px;
