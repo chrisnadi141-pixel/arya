@@ -138,7 +138,7 @@ body {
 #jamDigital {
   font-size: 3.5rem;
   font-weight: 900;
-  color: #00ffff;
+  color: #e53935;
   text-shadow: 0 0 15px rgba(0,255,255,.9);
   line-height: 1;
 }
@@ -181,7 +181,7 @@ body {
   border-radius: 12px;
   position: fixed;
   right: 10px;
-  top: 160px;
+  top: 145px;
   max-width: 300px;
   font-size: 1rem;
   font-weight: 600;
