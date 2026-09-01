@@ -314,10 +314,10 @@ body {
 <!-- Box tombol remote (pengganti tombol angka keyboard: 1,3,5,6,7) -->
 <div id="remoteButtons">
   <div class="remoteBtn" title="Fullscreen (1)" data-key="1">1</div>
-  <div class="remoteBtn" title="Pengumuman 3" data-key="3">3</div>
+  <div class="remoteBtn" title="Ganti Tema" data-key="7">7</div>
   <div class="remoteBtn" title="Pengumuman 5" data-key="5">5</div>
   <div class="remoteBtn" title="Teks Berjalan" data-key="6">6</div>
-  <div class="remoteBtn" title="Ganti Tema" data-key="7">7</div>
+  <div class="remoteBtn" title="Pengumuman 3" data-key="3">3</div>
 </div>
 
 <div id="hariBesarBox">
