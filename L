@@ -86,7 +86,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #00ff00;
+  background: #4caf50;
   border-radius: 35px;
   display: none;
   z-index: 2;
@@ -255,7 +255,7 @@ body {
   background: rgba(255,255,255,.25);
 }
 </style>
-<link id="theme-link" rel="stylesheet" href="style-S.css">
+<link id="theme-link" rel="stylesheet" href="styleX.css">
 </head>
 <body>
 
@@ -365,6 +365,11 @@ body {
 <script>
   let hlsInstance = null;
   let isNearAdzan = false; 
+  // TAMBAHAN: flag ini bernilai true selama live streaming sedang tampil di layar,
+  // baik dinyalakan otomatis (1 menit sebelum "menuju adzan") maupun manual (tombol 4).
+  // Dipakai slideshow gambar di bawah supaya TIDAK mengganti gambar / mematikan streaming
+  // selama flag ini true.
+  let streamingModeActive = false;
   const streamUrl = 'https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8';
 
   function stopStreaming() {
@@ -375,6 +380,7 @@ body {
       hlsInstance.destroy();
       hlsInstance = null;
     }
+    streamingModeActive = false;
   }
 
   // Fungsi murni untuk MENYALAKAN streaming (dipakai oleh toggle manual maupun auto-trigger)
@@ -383,6 +389,7 @@ body {
     const imgTengah = document.getElementById('gambarTengah');
     video.style.display = 'block';
     imgTengah.style.display = 'block';
+    streamingModeActive = true;
     if (Hls.isSupported()) {
       hlsInstance = new Hls();
       hlsInstance.loadSource(streamUrl);
@@ -466,10 +473,10 @@ body {
   function doToggleTheme() {
     const theme = document.getElementById("theme-link");
     if (theme) {
-      if (theme.getAttribute("href") === "style2a.css") {
+      if (theme.getAttribute("href") === "styleX.css") {
         theme.setAttribute("href", "style-S.css");
       } else {
-        theme.setAttribute("href", "style2a.css");
+        theme.setAttribute("href", "styleX.css");
       }
     }
   }
@@ -773,15 +780,24 @@ function updateHariBesar(){
 updateHariBesar();
 </script>
 <script>
+// ============ SLIDESHOW GAMBAR (pengurus.jpg / pengumuman5.jpg / pengumuman3.jpg) ============
+// DIPERBAIKI: slideshow ini sekarang berhenti total (tidak mengganti gambar & tidak mematikan
+// streaming) selama live streaming sedang aktif -- baik saat dinyalakan otomatis 1 menit sebelum
+// "menuju adzan", maupun saat "menuju adzan"/"menuju iqomah" (isNearAdzan). Sebelumnya slideshow
+// tetap jalan tiap 15 detik dan memanggil stopStreaming(), sehingga live streaming yang baru saja
+// dinyalakan otomatis langsung mati lagi digantikan gambar.
 const bg = ["pengurus.jpg","pengumuman5.jpg","pengumuman3.jpg"];
 let i = 0;
 
 setInterval(() => {
-  if (typeof isNearAdzan !== 'undefined' && isNearAdzan) return; // jangan ganti gambar saat menjelang/adzan-iqomah
+  // Jangan ganti gambar saat menjelang adzan / adzan / iqomah
+  if (typeof isNearAdzan !== 'undefined' && isNearAdzan) return;
+  // Jangan ganti gambar (dan jangan matikan streaming) selama live streaming sedang tampil,
+  // baik dinyalakan otomatis maupun manual
+  if (typeof streamingModeActive !== 'undefined' && streamingModeActive) return;
 
   const imgTengah = document.getElementById('gambarTengah');
   if (imgTengah) {
-    if (typeof stopStreaming === 'function') stopStreaming(); // pastikan streaming video mati saat slideshow jalan
     imgTengah.style.display = 'block';
     imgTengah.setAttribute('src', bg[i]);
   }
