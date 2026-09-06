@@ -438,7 +438,7 @@ body {
     if (imgTengah) {
       imgTengah.style.display = 'block';
       if (imgTengah.getAttribute('src') === 'pengumuman3.jpg') {
-        imgTengah.setAttribute('src', 'nabawi1.jpg');
+        imgTengah.setAttribute('src', 'pengumuman3.jpg');
       } else {
         imgTengah.setAttribute('src', 'pengumuman3.jpg');
       }
@@ -452,7 +452,7 @@ body {
     if (imgTengah) {
       imgTengah.style.display = 'block';
       if (imgTengah.getAttribute('src') === 'pengumuman5.jpg') {
-        imgTengah.setAttribute('src', 'nabawi1.jpg');
+        imgTengah.setAttribute('src', 'pengumuman5.jpg');
       } else {
         imgTengah.setAttribute('src', 'pengumuman5.jpg');
       }
@@ -780,7 +780,7 @@ function updateHariBesar(){
 updateHariBesar();
 </script>
 <script>
-// ============ SLIDESHOW GAMBAR (pengurus.jpg / pengumuman5.jpg / pengumuman3.jpg) ============
+// ============ SLIDESHOW GAMBAR (nabawi1.jpg / pengumuman5.jpg / pengumuman3.jpg) ============
 // DIPERBAIKI: slideshow ini sekarang berhenti total (tidak mengganti gambar & tidak mematikan
 // streaming) selama live streaming sedang aktif -- baik saat dinyalakan otomatis 1 menit sebelum
 // "menuju adzan", maupun saat "menuju adzan"/"menuju iqomah" (isNearAdzan). Sebelumnya slideshow
