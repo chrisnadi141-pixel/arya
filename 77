@@ -821,7 +821,7 @@ updateHariBesar();
 // "menuju adzan", maupun saat "menuju adzan"/"menuju iqomah" (isNearAdzan). Sebelumnya slideshow
 // tetap jalan tiap 15 detik dan memanggil stopStreaming(), sehingga live streaming yang baru saja
 // dinyalakan otomatis langsung mati lagi digantikan gambar.
-const bg = ["pengumuman3.jpg","pengumuman5.jpg","pengumuman6.jpg"];
+const bg = ["pengumuman3.jpg","pengumuman5.jpg","pengumuman6.jpg","pengumuman7.jpg"];
 let i = 0;
 
 setInterval(() => {
