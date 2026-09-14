@@ -608,7 +608,7 @@ setInterval(() => {
 }, 1000);  
 </script>
 
-<script src="sudi_2026.js"></script>
+<script src="jakt_2026.js"></script>
 <script>
 function parseCSV(text){
   const lines = text.split(/\r?\n/).filter(l=>l.trim()!=="");
