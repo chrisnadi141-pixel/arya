@@ -207,7 +207,7 @@ body {
   border-radius: 12px;
   position: fixed;
   right: 10px;
-  top: 130px;
+  top: 110px;
   max-width: 300px;
   font-size: 1rem;
   font-weight: 600;
