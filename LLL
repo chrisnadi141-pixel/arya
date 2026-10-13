@@ -315,11 +315,11 @@ body {
   <div class="remoteBtn" title="Teks Berjalan" data-key="6">6</div>
   <div class="remoteBtn" title="Ganti Tema" data-key="7">7</div>
 </div>
-
+<!--
 <div id="hariBesarBox">
   <span id="hariBesarText">Memuat hari besar Islam...</span>
 </div>
-
+-->
 <!-- ================= BAGIAN TENGAH UTAMA (GAMBAR MASJID, STREAMING & PENGUMUMAN) ================= -->
 <div class="main-content">
   <div class="quote-box">
