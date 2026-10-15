@@ -319,9 +319,9 @@ body {
   <div class="remoteBtn" title="Ganti Tema" data-key="7">7</div>
 </div>
 
-<div id="hariBesarBox">
+<!--<div id="hariBesarBox">
   <span id="hariBesarText">Memuat hari besar Islam...</span>
-</div>
+</div>-->
 
 <!-- ================= BAGIAN TENGAH UTAMA (GAMBAR MASJID, STREAMING & PENGUMUMAN) ================= -->
 <div class="main-content">
