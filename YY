@@ -318,11 +318,11 @@ body {
   <div class="remoteBtn" title="Teks Berjalan" data-key="6">6</div>
   <div class="remoteBtn" title="Ganti Tema" data-key="7">7</div>
 </div>
-<!--
+
 <div id="hariBesarBox">
   <span id="hariBesarText">Memuat hari besar Islam...</span>
 </div>
--->
+
 <!-- ================= BAGIAN TENGAH UTAMA (GAMBAR MASJID, STREAMING & PENGUMUMAN) ================= -->
 <div class="main-content">
   <div class="quote-box">
@@ -387,7 +387,7 @@ body {
   <div class="overlay-bg"></div>
   <img src="iqomah.jpg" alt="Waktu Sholat" style="display:block;">
   <div class="overlay-content">
-    <div class="sholat-title">WAKTU SHOLAT</div>
+    <div id="sholatTitle" class="sholat-title">WAKTU SHOLAT</div>
     <div id="sholatClock" class="sholat-clock">00:00:00</div>
   </div>
 </div>
@@ -664,7 +664,8 @@ if (typeof rawData !== 'undefined') {
 let modeIqomahActive = false;
 let sholatActive = false;      // fase WAKTU SHOLAT (setelah iqomah selesai)
 let sholatEnd = 0;
-const DURASI_SHOLAT = 5 * 60 * 1000; // 5 menit
+let sholatJudul = "WAKTU SHOLAT"; // Jumat Dzuhur diganti "WAKTU KHUTBAH JUMAT"
+const DURASI_SHOLAT = 10 * 60 * 1000; // 5 menit
 let statusAdzan = {};
 
 function updateCountdown(){
@@ -726,6 +727,7 @@ function updateCountdown(){
       jumatOverlay.style.display = "none";
       sholatOverlay.style.display = "flex";
       const t = new Date();
+      document.getElementById("sholatTitle").textContent = sholatJudul;
       sholatClock.textContent = [t.getHours(), t.getMinutes(), t.getSeconds()]
         .map(v => String(v).padStart(2,"0")).join(":");
     } else {
@@ -770,6 +772,7 @@ function updateCountdown(){
       overlay.style.display = "none";
       modeIqomahActive = false;
       // Iqomah selesai -> tampilkan WAKTU SHOLAT selama 5 menit
+      sholatJudul = "WAKTU SHOLAT";
       sholatActive = true;
       sholatEnd = Date.now() + DURASI_SHOLAT;
       isNearAdzan = true;
@@ -802,9 +805,13 @@ function updateCountdown(){
     if(beep) beep.play().catch(e=>{});
 
     if(hariIni === 5 && next.n === "Dzuhur"){
+      // Jumat Dzuhur: tidak ada iqomah -> langsung tampil WAKTU KOTBAH selama 5 menit
       modeIqomahActive = false;
-      jumatOverlay.style.display = "flex";
+      jumatOverlay.style.display = "none";
       overlay.style.display = "none";
+      sholatJudul = "WAKTU KHUTBAH JUMAT";
+      sholatActive = true;
+      sholatEnd = Date.now() + DURASI_SHOLAT;
     } else {
       // Mulai Hitung Mundur Iqomah selama 8 Menit (480000 ms)
       modeIqomahActive = true;
