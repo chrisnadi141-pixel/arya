@@ -312,7 +312,8 @@ body {
   overflow: visible !important;
   text-align: center !important;
 }
-#hijriDisplay { display: block !important; min-height: 1.3em; }
+#headerTop .header-right { overflow: visible !important; }
+#tanggalDisplay { display: block !important; visibility: visible !important; }
 </style>
 </head>
 <body>
@@ -335,7 +336,6 @@ body {
 
   <div class="header-right">
     <div id="tanggalDisplay"></div>
-    <div id="hijriDisplay"></div>
   </div>
 </div>
 
@@ -706,9 +706,12 @@ function updateTanggal() {
     hd = h.d; hm = h.m; hy = h.y;
   }
 
-  var hijriDisplay = document.getElementById("hijriDisplay");
-  if (hijriDisplay) {
-    hijriDisplay.innerHTML = hd + " " + hijriMonths[hm - 1] + " " + hy + " H";
+  // Hijriah ditulis di dalam #tanggalDisplay (elemen yang sudah terbukti tampil), baris kedua
+  var teksHijri = hd + " " + hijriMonths[hm - 1] + " " + hy + " H";
+  var el = document.getElementById("tanggalDisplay");
+  if (el) {
+    el.innerHTML = hari[n.getDay()] + ", " + n.getDate() + " " + bulan[n.getMonth()] + " " + n.getFullYear() +
+      '<br><span style="display:inline-block;font-size:1.1rem;color:#ffd966;visibility:visible;opacity:1;white-space:nowrap;">' + teksHijri + '</span>';
   }
 }
 
