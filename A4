@@ -1006,15 +1006,15 @@ setInterval(updateCountdown, 1000);
 <!-- ================= HARI BESAR ISLAM ================= -->
 <script type="text/javascript">
 var hariBesar = [
-  {n:"Isra Mi'raj Nabi (ﷺ)",m:1,d:16},
-  {n:"Awal Ramadhan",m:2,d:19},
-  {n:"Nuzulul Qur'an",m:3,d:7},
-  {n:"Idul Fitri",m:3,d:20},
-  {n:"Idul Adha",m:5,d:27},
-  {n:"Tahun Baru Islam",m:6,d:16},
-  {n:"Maulid Nabi (ﷺ)",m:8,d:25}
+  
+  {n:"Awal Ramadhan",        m:2,  d:8},
+  {n:"Nuzulul Qur'an",       m:2,  d:24},
+  {n:"Idul Fitri",           m:3,  d:11},
+  {n:"Idul Adha",            m:5,  d:17},
+  {n:"Tahun Baru Islam",     m:6,  d:6},
+  {n:"Maulid Nabi (ﷺ)",      m:8,  d:15},
+  {n:"Isra Mi'raj Nabi (ﷺ)", m:1,  d:3},
 ];
-
 function updateHariBesar() {
   var now = new Date();
   var dekat = null, sel = 9999, i, h, t, s;
