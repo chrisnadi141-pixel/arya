@@ -176,7 +176,7 @@ body {
 #jamDigital {
   font-size: 3.5rem;
   font-weight: 900;
-  color: #e53935;
+  color: white;
   text-shadow: 0 0 15px rgba(0,255,255,.9);
   line-height: 1;
 }
@@ -236,11 +236,13 @@ body {
 .overlay-bg { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: -1; }
 .overlay img { position: absolute; width:100%; height:100%; object-fit:cover; filter: brightness(0.4); z-index: -1; }
 .overlay-content { text-align: center; color: white; position: relative; z-index: 1000000; }
+#universalOverlay .overlay-content { display:flex; flex-direction:column; align-items:center; }
 #sholatOverlay .overlay-content { display:flex; flex-direction:column; align-items:center; gap:20px; }
 #sholatOverlay .sholat-title { font-size: 6rem; font-weight: 900; letter-spacing: 8px; color:#fff; text-shadow: 0 0 30px rgba(0,0,0,1); }
 #sholatOverlay .sholat-clock { font-size: 7rem; font-weight: 900; color:#ffd966; text-shadow: 0 0 30px rgba(0,0,0,1); }
 .countdown-large { font-size: 8rem; font-weight: 900; color: #ffffff; text-shadow: 0 0 30px rgba(0,0,0,1); }
 .overlay-text { font-size: 3rem; font-weight: bold; letter-spacing: 5px; }
+.overlay-note { display:none; margin-top: 30px; max-width: 80vw; font-size: 2.2rem; font-weight: bold; line-height: 1.4; color:#ffd966; text-shadow: 0 0 20px rgba(0,0,0,1); }
 
 /* ================= BOX TOMBOL REMOTE (untuk TV/remote tanpa tombol angka) =================
    Ditempatkan di sisi kiri layar, di bawah jam digital, tersusun vertikal.
@@ -348,9 +350,9 @@ body {
   <div class="remoteBtn" title="Ganti Tema" data-key="7">7</div>
 </div>
 
-<!--<div id="hariBesarBox">
+<div id="hariBesarBox">
   <span id="hariBesarText">Memuat hari besar Islam...</span>
-</div>-->
+</div>
 
 <!-- ================= BAGIAN TENGAH UTAMA (GAMBAR MASJID, STREAMING & PENGUMUMAN) ================= -->
 <div class="main-content">
@@ -397,7 +399,7 @@ body {
   <div class="countdown" id="countdown">
     Memuat...
   </div>
-</div> <!-- TERTUTUP DENGAN BENAR DI SINI -->
+</div> 
 
 <audio id="adzanAudio" src="beep.mp3"></audio>
 <audio id="beepAudio" src="beep.mp3"></audio>
@@ -408,6 +410,7 @@ body {
   <div class="overlay-content">
     <div id="overlayCountdown" class="countdown-large">00:00</div>
     <div id="overlayStatus" class="overlay-text">MENUJU ADZAN</div>
+    <div id="overlayNote" class="overlay-note">Para jamaah mohon untuk bersiap, dan alat komunikasi mohon dalam mode senyap. terima kasih</div>
   </div>
 </div>
 
@@ -809,6 +812,15 @@ var sholatActive = false;      // fase WAKTU SHOLAT (setelah iqomah selesai / kh
 var sholatEnd = 0;
 var sholatJudul = "WAKTU SHOLAT"; // Jumat Dzuhur diganti "WAKTU KHUTBAH JUMAT"
 var DURASI_SHOLAT = 10 * 60 * 1000; // 10 menit
+var IQOMAH_DETIK = {
+  Subuh:   600,   // 10 menit
+  Dzuhur:  420,   // 7 menit
+  Ashar:   480,   // 8 menit
+  Maghrib: 240,   // 4 menit
+  Isya:    420    // 7 menit
+};
+var IQOMAH_DEFAULT_DETIK = 480;
+var iqomahSudahMulai = {};   // penanda adzan/iqomah yang sudah dijalankan hari ini
 
 function updateCountdown() {
   if (!window.jadwal) return;
@@ -854,6 +866,7 @@ function updateCountdown() {
   var overlayCD = document.getElementById("overlayCountdown");
   var overlayStatus = document.getElementById("overlayStatus");
   var imgIqomahBg = document.getElementById("imgIqomahBg");
+  var overlayNote = document.getElementById("overlayNote");
   var jumatOverlay = document.getElementById("jumatOverlay");
   var jumatCD = document.getElementById("jumatCountdown");
   var beep = document.getElementById("beepAudio");
@@ -890,6 +903,43 @@ function updateCountdown() {
     }
   }
 
+  // ============ DETEKSI MASUK WAKTU ADZAN -> MULAI IQOMAH SESUAI IQOMAH_DETIK ============
+  // (waktu sholat yang barusan lewat tidak lagi menjadi "next", jadi dicek terpisah di sini)
+  if (!modeIqomahActive && !sholatActive) {
+    for (i = 0; i < list.length; i++) {
+      parts = list[i].t.split(":");
+      var adzanAt = new Date(today.getFullYear(), today.getMonth(), today.getDate(), parseInt(parts[0], 10), parseInt(parts[1], 10), 0);
+      var lewat = now - adzanAt;                       // ms sejak adzan
+      var durIqomah = (IQOMAH_DETIK[list[i].n] || IQOMAH_DEFAULT_DETIK) * 1000;
+      var kunci = adzanAt.toDateString() + "-" + list[i].n;
+      var jumatDzuhur = (hariIni === 5 && list[i].n === "Dzuhur");
+
+      if (jumatDzuhur) {
+        // Jumat Dzuhur: tidak ada iqomah -> langsung WAKTU KHUTBAH JUMAT
+        if (lewat >= 0 && lewat < 10000 && !iqomahSudahMulai[kunci]) {
+          iqomahSudahMulai[kunci] = true;
+          isNearAdzan = true;
+          stopStreaming();
+          if (beep) safePlay(beep);
+          jumatOverlay.style.display = "none";
+          overlay.style.display = "none";
+          sholatJudul = "WAKTU KHUTBAH JUMAT";
+          sholatActive = true;
+          sholatEnd = Date.now() + DURASI_SHOLAT;
+          return;
+        }
+      } else if (lewat >= 0 && lewat < durIqomah) {
+        // Iqomah dihitung dari waktu adzan, durasi sesuai IQOMAH_DETIK[nama sholat]
+        if (!iqomahSudahMulai[kunci] && lewat < 10000 && beep) safePlay(beep);
+        iqomahSudahMulai[kunci] = true;
+        modeIqomahActive = true;
+        window.iqomahEnd = adzanAt.getTime() + durIqomah;
+        window.iqomahNama = list[i].n;
+        break;
+      }
+    }
+  }
+
   // MODE IQOMAH sedang berjalan
   if (modeIqomahActive) {
     isNearAdzan = true;
@@ -900,6 +950,9 @@ function updateCountdown() {
       jumatOverlay.style.display = "none";
       if (imgIqomahBg) imgIqomahBg.style.display = "block";
       setText(overlayStatus, "MENJELANG IQOMAH");
+      overlayStatus.style.order = "-1";
+      overlayStatus.style.marginBottom = "10px";
+      if (overlayNote) overlayNote.style.display = "block";
       overlayStatus.style.color = "white";
       overlayStatus.style.fontSize = "3rem";
 
@@ -908,6 +961,7 @@ function updateCountdown() {
       setText(overlayCD, im + ":" + is);
     } else {
       overlay.style.display = "none";
+      if (overlayNote) overlayNote.style.display = "none";
       modeIqomahActive = false;
       // Iqomah selesai -> tampilkan WAKTU SHOLAT
       sholatJudul = "WAKTU SHOLAT";
@@ -932,28 +986,11 @@ function updateCountdown() {
       jumatOverlay.style.display = "none";
       if (imgIqomahBg) imgIqomahBg.style.display = "block";
       setText(overlayStatus, "MENUJU ADZAN");
+      overlayStatus.style.order = "0";
+      overlayStatus.style.marginBottom = "0";
+      if (overlayNote) overlayNote.style.display = "none";
       setText(overlayCD, m + ":" + s);
       overlayCD.style.color = "white";
-    }
-  }
-  // SAAT TEPAT WAKTU ADZAN (0 detik)
-  else if (totalDetik <= 0 && totalDetik >= -5) {
-    isNearAdzan = true;
-    stopStreaming();
-    if (beep) safePlay(beep);
-
-    if (hariIni === 5 && next.n === "Dzuhur") {
-      // Jumat Dzuhur: tidak ada iqomah -> langsung tampil WAKTU KHUTBAH JUMAT
-      modeIqomahActive = false;
-      jumatOverlay.style.display = "none";
-      overlay.style.display = "none";
-      sholatJudul = "WAKTU KHUTBAH JUMAT";
-      sholatActive = true;
-      sholatEnd = Date.now() + DURASI_SHOLAT;
-    } else {
-      // Mulai hitung mundur iqomah selama 8 menit (480000 ms)
-      modeIqomahActive = true;
-      window.iqomahEnd = new Date().getTime() + 480000;
     }
   }
   else {
@@ -969,15 +1006,15 @@ setInterval(updateCountdown, 1000);
 <!-- ================= HARI BESAR ISLAM ================= -->
 <script type="text/javascript">
 var hariBesar = [
-  {n:"Isra Mi'raj Nabi (ﷺ)",m:1,d:16},
-  {n:"Awal Ramadhan",m:2,d:19},
-  {n:"Nuzulul Qur'an",m:3,d:7},
-  {n:"Idul Fitri",m:3,d:20},
-  {n:"Idul Adha",m:5,d:27},
-  {n:"Tahun Baru Islam",m:6,d:16},
-  {n:"Maulid Nabi (ﷺ)",m:8,d:25}
+  
+  {n:"Awal Ramadhan",        m:2,  d:8},
+  {n:"Nuzulul Qur'an",       m:2,  d:24},
+  {n:"Idul Fitri",           m:3,  d:11},
+  {n:"Idul Adha",            m:5,  d:17},
+  {n:"Tahun Baru Islam",     m:6,  d:6},
+  {n:"Maulid Nabi (ﷺ)",      m:8,  d:15},
+  {n:"Isra Mi'raj Nabi (ﷺ)", m:1,  d:5},
 ];
-
 function updateHariBesar() {
   var now = new Date();
   var dekat = null, sel = 9999, i, h, t, s;
