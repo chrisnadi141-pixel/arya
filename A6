@@ -813,11 +813,11 @@ var sholatEnd = 0;
 var sholatJudul = "WAKTU SHOLAT"; // Jumat Dzuhur diganti "WAKTU KHUTBAH JUMAT"
 var DURASI_SHOLAT = 5 * 60 * 1000; // 5 menit
 var IQOMAH_DETIK = {
-  Subuh:   720,   // 12 menit
-  Dzuhur:  420,   // 7 menit
-  Ashar:   480,   // 8 menit
-  Maghrib: 300,   // 5 menit
-  Isya:    420    // 7 menit
+  Subuh:   660,   // 11 menit
+  Dzuhur:  360,   // 6 menit
+  Ashar:   420,   // 7 menit
+  Maghrib: 240,   // 4 menit
+  Isya:    360    // 6 menit
 };
 var IQOMAH_DEFAULT_DETIK = 480;
 var iqomahSudahMulai = {};   // penanda adzan/iqomah yang sudah dijalankan hari ini
