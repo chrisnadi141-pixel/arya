@@ -813,7 +813,7 @@ var sholatEnd = 0;
 var sholatJudul = "WAKTU SHOLAT"; // Jumat Dzuhur diganti "WAKTU KHUTBAH JUMAT"
 var DURASI_SHOLAT = 5 * 60 * 1000; // 5 menit
 var IQOMAH_DETIK = {
-  Subuh:   660,   // 11 menit
+  Subuh:   780,   // 13 menit
   Dzuhur:  360,   // 6 menit
   Ashar:   420,   // 7 menit
   Maghrib: 240,   // 4 menit
