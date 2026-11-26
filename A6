@@ -817,7 +817,7 @@ var IQOMAH_DETIK = {
   Dzuhur:  360,   // 6 menit
   Ashar:   420,   // 7 menit
   Maghrib: 240,   // 4 menit
-  Isya:    360    // 6 menit
+  Isya:    420    // 7 menit
 };
 var IQOMAH_DEFAULT_DETIK = 480;
 var iqomahSudahMulai = {};   // penanda adzan/iqomah yang sudah dijalankan hari ini
