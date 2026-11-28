@@ -815,7 +815,7 @@ var DURASI_SHOLAT = 5 * 60 * 1000; // 5 menit
 var IQOMAH_DETIK = {
   Subuh:   780,   // 13 menit
   Dzuhur:  360,   // 6 menit
-  Ashar:   420,   // 7 menit
+  Ashar:   360,   // 6 menit
   Maghrib: 240,   // 4 menit
   Isya:    420    // 7 menit
 };
